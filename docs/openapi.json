@@ -3,7 +3,7 @@
   "info": {
     "title": "Foldways API",
     "description": "Protein engineering tools running on Modal.",
-    "version": "0.3.0"
+    "version": "0.1.0"
   },
   "paths": {
     "/health": {
@@ -485,12 +485,19 @@
           }
         },
         "type": "object",
-        "required": ["service", "params"],
+        "required": [
+          "service",
+          "params"
+        ],
         "title": "BatchRequest"
       },
       "BatchState": {
         "type": "string",
-        "enum": ["in_progress", "completed", "completed_with_failures"],
+        "enum": [
+          "in_progress",
+          "completed",
+          "completed_with_failures"
+        ],
         "title": "BatchState",
         "description": "The status values a batch can report, aggregated from its jobs."
       },
@@ -522,7 +529,13 @@
           }
         },
         "type": "object",
-        "required": ["id", "created_at", "status", "counts", "jobs"],
+        "required": [
+          "id",
+          "created_at",
+          "status",
+          "counts",
+          "jobs"
+        ],
         "title": "BatchStatus"
       },
       "BatchSubmitResponse": {
@@ -540,7 +553,10 @@
           }
         },
         "type": "object",
-        "required": ["batch_id", "jobs"],
+        "required": [
+          "batch_id",
+          "jobs"
+        ],
         "title": "BatchSubmitResponse"
       },
       "HTTPValidationError": {
@@ -585,7 +601,10 @@
           }
         },
         "type": "object",
-        "required": ["service", "params"],
+        "required": [
+          "service",
+          "params"
+        ],
         "title": "JobRequest"
       },
       "JobState": {
@@ -644,7 +663,12 @@
           }
         },
         "type": "object",
-        "required": ["id", "service", "status", "created_at"],
+        "required": [
+          "id",
+          "service",
+          "status",
+          "created_at"
+        ],
         "title": "JobStatus"
       },
       "ServiceInfo": {
@@ -664,7 +688,11 @@
           }
         },
         "type": "object",
-        "required": ["name", "description", "params_schema"],
+        "required": [
+          "name",
+          "description",
+          "params_schema"
+        ],
         "title": "ServiceInfo"
       },
       "ValidationError": {
@@ -700,7 +728,11 @@
           }
         },
         "type": "object",
-        "required": ["loc", "msg", "type"],
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
         "title": "ValidationError"
       }
     }
