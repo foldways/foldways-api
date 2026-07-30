@@ -1,0 +1,41 @@
+[project]
+name = "foldways-api"
+version = "0.1.0"
+description = "Foldways API"
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.12"
+dependencies = [
+    "modal>=1.5.2,<2.0.0",
+    "fastapi>=0.139.2,<0.140.0",
+    "pydantic>=2.13.4,<3.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1.1,<10.0.0",
+    "pyright>=1.1.411,<2.0.0",
+    "ruff>=0.15.22,<1.0.0",
+    "httpx2>=2.7.0,<3.0.0",
+    "numpy>=2.0.0,<3.0.0",
+]
+
+[tool.uv]
+package = false
+
+[tool.ruff]
+line-length = 120
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I", "UP"]
+
+[tool.ruff.format]
+quote-style = "double"
+
+[tool.pyright]
+pythonVersion = "3.12"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]

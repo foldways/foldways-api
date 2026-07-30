@@ -1,0 +1,8 @@
+{
+  "service": "esmc",
+  "name": "esmc-variant-scores-mock",
+  "params": {
+    "sequences": ["MELLKKLLEELKG"],
+    "mode": "variant_scores"
+  }
+}

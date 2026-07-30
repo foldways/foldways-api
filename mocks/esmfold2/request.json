@@ -1,0 +1,15 @@
+{
+  "service": "esmfold2",
+  "name": "esmfold2-mock",
+  "params": {
+    "sequences": [
+      {
+        "protein": {
+          "id": "A",
+          "sequence": "KVYERCEFARTLKRNGMAGYYGVSLADWVCLAQHESNYNTRATNYNRGDQSTDYGIFQINSRYWCNDGKTPRAVNACGINCSALLQDDITAAIQCAKRVVRDPQGIRAWVAWRAHCQNRDLSQYIRNCGV"
+        }
+      }
+    ],
+    "seed": 0
+  }
+}

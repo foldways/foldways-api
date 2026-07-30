@@ -1,0 +1,191 @@
+affinity_ensemble: false
+affinity_model_args:
+  add_s_input_to_s: false
+  add_s_to_z_prod: false
+  add_z_input_to_z: false
+  affinity_args:
+    groups:
+      0: 1
+    val_groups: !!set
+      0: null
+  confidence_args:
+    num_pae_bins: 64
+    num_pde_bins: 64
+    num_plddt_bins: 50
+    relative_confidence: none
+  max_dist: 22
+  no_trunk_feats: false
+  num_dist_bins: 64
+  use_gaussian: false
+  use_s_diffusion: false
+affinity_model_args1: {}
+affinity_model_args2: {}
+affinity_mw_correction: true
+affinity_prediction: false
+aggregate_distogram: true
+alpha_pae: 0.0
+atom_feature_dim: 388
+atom_s: 128
+atom_z: 16
+atoms_per_window_keys: 128
+atoms_per_window_queries: 32
+bond_type_feature: true
+checkpoint_diffusion_conditioning: false
+checkpoints: null
+conditioning_cutoff_max: 20.0
+conditioning_cutoff_min: 4.0
+confidence_model_args: null
+confidence_prediction: false
+diffusion_loss_args:
+  add_bond_loss: false
+  add_smooth_lddt_loss: true
+  filter_by_plddt: 0.0
+  ligand_loss_weight: 10.0
+  nucleotide_loss_weight: 5.0
+diffusion_process_args:
+  P_mean: -1.2
+  P_std: 1.5
+  alignment_reverse_diff: true
+  coordinate_augmentation: true
+  gamma_0: 0.8
+  gamma_min: 1.0
+  mse_rotational_alignment: true
+  noise_scale: 1.0
+  rho: 7
+  sigma_data: 16.0
+  sigma_max: 160.0
+  sigma_min: 0.0004
+  step_scale: 1.0
+  synchronize_sigmas: false
+ema: true
+ema_decay: 0.999
+embedder_args:
+  add_binding_specification: false
+  add_cyclic_flag: true
+  add_design_mask_flag: false
+  add_method_conditioning: true
+  add_modified_flag: true
+  add_mol_type_feat: true
+  add_ss_specification: false
+  atom_encoder_depth: 1
+  atom_encoder_heads: 4
+exclude_ions_from_lddt: true
+freeze_template_weights: false
+ignore_ckpt_shape_mismatch: false
+inference_logging: false
+inverse_fold: true
+inverse_fold_args:
+  atom_s: 128
+  atom_z: 16
+  autoregressive: true
+  dropout: 0.1
+  enable_input_embedder: true
+  hidden_dim: 128
+  inverse_fold_noise: 0.2
+  inverse_fold_restriction: []
+  node_dim: 128
+  num_decoder_layers: 3
+  num_encoder_layers: 6
+  num_heads: 4
+  pair_dim: 128
+  softmax_dropout: 0.2
+  token_s: 384
+  token_z: 128
+  topk: 30
+  transformation_scale_factor: 1.0
+log_loss_every_steps: 50
+masker_args:
+  mask: true
+  mask_backbone: false
+max_dist: 22.0
+min_dist: 2.0
+msa_args:
+  activation_checkpointing: false
+  miniformer_blocks: true
+  msa_blocks: 0
+  msa_dropout: 0
+  msa_s: 2
+  pairwise_head_width: 2
+  pairwise_num_heads: 1
+  use_paired_feature: true
+  z_dropout: 0
+no_random_recycling_training: false
+noise_scale_schedule: null
+num_bins: 64
+num_val_datasets: 1
+pairformer_args:
+  activation_checkpointing: false
+  dropout: 0.25
+  num_blocks: 2
+  num_heads: 16
+  post_layer_norm: false
+predict_args:
+  diffusion_samples: 1
+  recycling_steps: 3
+  sampling_steps: 200
+predict_bfactor: true
+predict_res_type: true
+refolding_validator: null
+score_model_args:
+  activation_checkpointing: false
+  atom_decoder_depth: 3
+  atom_decoder_heads: 4
+  atom_encoder_depth: 3
+  atom_encoder_heads: 4
+  conditioning_transition_layers: 2
+  diffusion_pairformer_args:
+    dropout: 0
+    num_blocks: 0
+    num_heads: 2
+    use_s_to_z: false
+  dim_fourier: 256
+  sigma_data: 16
+  token_layers: 1
+  token_transformer_depth: 3
+  token_transformer_heads: 16
+  transformer_post_ln: false
+step_scale_schedule: null
+structure_prediction_training: true
+template_args: null
+token_distance_args:
+  disable_token_distance_transition: true
+  distance_gaussian_dim: 32
+  token_distance_blocks: 0
+  token_distance_dim: 128
+  use_relative_position_encoding: true
+  use_token_distance_feats: true
+token_level_confidence: true
+token_s: 384
+token_z: 128
+training_args:
+  adam_beta_1: 0.9
+  adam_beta_2: 0.95
+  adam_eps: 1.0e-08
+  affinity_loss_weight: 0.003
+  base_lr: 0.0
+  bfactor_loss_weight: 0.001
+  confidence_loss_weight: 0.0001
+  diffusion_loss_weight: 4.0
+  diffusion_multiplicity: 2
+  diffusion_samples: 1
+  distogram_loss_weight: 0.03
+  lr_scheduler: onecycle
+  max_lr: 0.001
+  pairtoken_loss_weight: 0.0
+  recycling_steps: 0
+  res_type_loss_weight: 1
+  sampling_steps: 20
+  skip_batch_by_single_rep: false
+  weight_decay: 0.003
+  weight_decay_exclude: true
+use_kernels: true
+use_miniformer: true
+use_templates: false
+use_token_distances: false
+validate_structure: true
+validation_args:
+  diffusion_samples: 1
+  recycling_steps: 0
+  sampling_steps: 200
+  symmetry_correction: false
+validators: null

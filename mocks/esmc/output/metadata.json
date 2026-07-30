@@ -1,0 +1,10 @@
+{
+  "model": "biohub/esmc-600m-2024-12",
+  "mode": "variant_scores",
+  "num_sequences": 1,
+  "sequence_lengths": [
+    13
+  ],
+  "amino_acids": "ACDEFGHIKLMNPQRSTVWY",
+  "method": "masked leave-one-out log-likelihood ratios"
+}

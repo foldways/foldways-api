@@ -1,0 +1,197 @@
+atom_s: 128
+atom_z: 16
+token_s: 384
+token_z: 128
+num_bins: 64
+training_args:
+  recycling_steps: 3
+  sampling_steps: 20
+  diffusion_multiplicity: 32
+  diffusion_samples: 1
+  affinity_loss_weight: 0.003
+  confidence_loss_weight: 0.0001
+  diffusion_loss_weight: 4.0
+  distogram_loss_weight: 0.03
+  bfactor_loss_weight: 0.001
+  adam_beta_1: 0.9
+  adam_beta_2: 0.95
+  adam_eps: 1.0e-08
+  lr_scheduler: af3
+  base_lr: 0.0
+  max_lr: 0.0005
+  lr_warmup_no_steps: 1000
+  lr_start_decay_after_n_steps: 50000
+  lr_decay_every_n_steps: 50000
+  lr_decay_factor: 0.95
+  weight_decay: 0.003
+  weight_decay_exclude: true
+  pairtoken_loss_weight: 0.0
+validation_args:
+  recycling_steps: 3
+  sampling_steps: 200
+  diffusion_samples: 1
+  symmetry_correction: false
+embedder_args:
+  atom_encoder_depth: 3
+  atom_encoder_heads: 4
+  add_mol_type_feat: true
+  add_method_conditioning: true
+  add_modified_flag: true
+  add_cyclic_flag: true
+  add_design_mask_flag: true
+  add_binding_specification: true
+  add_ss_specification: true
+msa_args:
+  msa_s: 64
+  msa_blocks: 4
+  msa_dropout: 0.15
+  z_dropout: 0.25
+  miniformer_blocks: false
+  pairwise_head_width: 32
+  pairwise_num_heads: 4
+  use_paired_feature: true
+  activation_checkpointing: false
+pairformer_args:
+  num_blocks: 64
+  num_heads: 16
+  dropout: 0.25
+  post_layer_norm: false
+  activation_checkpointing: false
+score_model_args:
+  sigma_data: 16
+  dim_fourier: 256
+  atom_encoder_depth: 3
+  atom_encoder_heads: 4
+  token_layers: 1
+  token_transformer_depth: 24
+  token_transformer_heads: 16
+  diffusion_pairformer_args:
+    num_blocks: 0
+    num_heads: 2
+    dropout: 0
+    use_s_to_z: false
+  atom_decoder_depth: 3
+  atom_decoder_heads: 4
+  conditioning_transition_layers: 2
+  transformer_post_ln: false
+  activation_checkpointing: false
+diffusion_process_args:
+  sigma_min: 0.0004
+  sigma_max: 160.0
+  sigma_data: 16.0
+  rho: 7
+  P_mean: -1.2
+  P_std: 1.5
+  gamma_0: 0.8
+  gamma_min: 1.0
+  noise_scale: null
+  step_scale: null
+  mse_rotational_alignment: true
+  coordinate_augmentation: true
+  alignment_reverse_diff: true
+  synchronize_sigmas: false
+  sampling_schedule: dilated
+  time_dilation: 2.667
+  time_dilation_start: 0.6
+  time_dilation_end: 0.8
+diffusion_loss_args:
+  add_smooth_lddt_loss: true
+  add_bond_loss: false
+  nucleotide_loss_weight: 5.0
+  ligand_loss_weight: 10.0
+  filter_by_plddt: 0.0
+affinity_model_args:
+  use_gaussian: false
+  num_dist_bins: 64
+  max_dist: 22
+  no_trunk_feats: false
+  add_s_to_z_prod: false
+  add_s_input_to_s: false
+  use_s_diffusion: false
+  add_z_input_to_z: false
+  confidence_args:
+    num_plddt_bins: 50
+    num_pde_bins: 64
+    num_pae_bins: 64
+    relative_confidence: none
+affinity_mw_correction: true
+affinity_ensemble: false
+affinity_model_args1: {}
+affinity_model_args2: {}
+confidence_model_args: null
+validators: null
+masker_args:
+  mask: true
+  mask_backbone: false
+num_val_datasets: 1
+atom_feature_dim: 388
+template_args:
+  template_dim: 64
+  template_blocks: 2
+  activation_checkpointing: false
+use_miniformer: false
+confidence_prediction: false
+affinity_prediction: false
+token_level_confidence: true
+alpha_pae: 0.0
+structure_prediction_training: true
+validate_structure: true
+atoms_per_window_queries: 32
+atoms_per_window_keys: 128
+exclude_ions_from_lddt: true
+ema: true
+ema_decay: 0.999
+ignore_ckpt_shape_mismatch: false
+min_dist: 2.0
+max_dist: 22.0
+predict_args:
+  recycling_steps: 3
+  sampling_steps: 500
+  diffusion_samples: 1
+checkpoints:
+  first_checkpoint_num_samples: 0.5
+  checkpoint_list:
+  - checkpoint:
+      num_samples: 0.5
+      path: /__modal/volumes/vo-FGKsP7tWxSk4wwEPDMOsEE/boltzgen_cache/models--boltzgen--boltzgen-1/snapshots/c1be29e1f82ffcc72264f64b993c43fb4e0d17f0/boltzgen1_adherence.ckpt
+step_scale_schedule:
+- step_scale: 1.8
+  period: 0.25
+- step_scale: 2.0
+  period: 0.25
+- step_scale: 1.8
+  period: 0.25
+- step_scale: 2.0
+  period: 0.25
+noise_scale_schedule:
+- noise_scale: 0.95
+  period: 0.25
+- noise_scale: 0.88
+  period: 0.25
+- noise_scale: 0.95
+  period: 0.25
+- noise_scale: 0.88
+  period: 0.25
+aggregate_distogram: true
+bond_type_feature: true
+no_random_recycling_training: false
+conditioning_cutoff_min: 4.0
+conditioning_cutoff_max: 20.0
+use_templates: true
+use_token_distances: true
+token_distance_args:
+  token_distance_dim: 64
+  token_distance_blocks: 2
+  use_token_distance_feats: true
+  distance_gaussian_dim: 32
+  activation_checkpointing: false
+predict_bfactor: true
+log_loss_every_steps: 50
+checkpoint_diffusion_conditioning: false
+freeze_template_weights: true
+refolding_validator: null
+predict_res_type: false
+inverse_fold: false
+inverse_fold_args: null
+inference_logging: false
+use_kernels: true
