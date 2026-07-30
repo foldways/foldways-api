@@ -84,7 +84,7 @@ Supported and planned services.
 | SolubleMPNN   | ⬜ Planned   | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
 | ThermoMPNN    | ⬜ Planned   | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)     | Property prediction  |
 | ABodyBuilder3 | ⬜ Planned   | [Exscientia/abodybuilder3](https://github.com/Exscientia/abodybuilder3) | Structure prediction |
-| BindCraft     | ⬜ Planned   | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)     | De novo design       |
+| BindCraft     | ✅ Supported | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)     | De novo design       |
 | Chai          | ⬜ Planned   | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)     | Structure prediction |
 | OpenDDE       | ⬜ Planned   | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)     | Structure prediction |
 | Protenix      | ⬜ Planned   | [bytedance/Protenix](https://github.com/bytedance/Protenix)             | Structure prediction |

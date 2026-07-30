@@ -1,8 +1,10 @@
 # AGENTS.md
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+Behavioral guidelines to reduce common LLM coding mistakes. Merge with
+project-specific instructions as needed.
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+**Tradeoff:** These guidelines bias toward caution over speed. For trivial
+tasks, use judgment.
 
 ## 1. Think Before Coding
 
@@ -25,7 +27,8 @@ Before implementing:
 - No error handling for impossible scenarios.
 - If you write 200 lines and it could be 50, rewrite it.
 
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes,
+simplify.
 
 ## 3. Surgical Changes
 
@@ -63,21 +66,27 @@ For multi-step tasks, state a brief plan:
 3. [Step] → verify: [check]
 ```
 
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
+Strong success criteria let you loop independently. Weak criteria ("make it
+work") require constant clarification.
 
 ## 5. Prose Style
 
 **No semicolons in prose.**
 
-This covers docstrings, comments, and pydantic `Field(description=...)` text. Use two sentences, or a comma with a conjunction.
+This covers docstrings, comments, and pydantic `Field(description=...)` text.
+Use two sentences, or a comma with a conjunction.
 
 - Bad: `"Recycling iterations; more = higher accuracy, slower."`
 - Good: `"Recycling iterations. More gives higher accuracy and runs slower."`
 
-Semicolons required by a format are fine, such as an HTTP `Content-Disposition` header value.
+Semicolons required by a format are fine, such as an HTTP `Content-Disposition`
+header value.
 
-Field descriptions are published API text. Pydantic promotes them into the OpenAPI schema, so they are read by API consumers, not just developers.
+Field descriptions are published API text. Pydantic promotes them into the
+OpenAPI schema, so they are read by API consumers, not just developers.
 
 ---
 
-**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
+**These guidelines are working if:** fewer unnecessary changes in diffs, fewer
+rewrites due to overcomplication, and clarifying questions come before
+implementation rather than after mistakes.
