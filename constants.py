@@ -20,6 +20,7 @@ VOLUME_ESMC_CACHE = f"{VOLUME_ROOT}/esmc_cache"
 VOLUME_ESMFOLD2_CACHE = f"{VOLUME_ROOT}/esmfold2_cache"
 VOLUME_BOLTZGEN_CACHE = f"{VOLUME_ROOT}/boltzgen_cache"
 VOLUME_PROTEINMPNN_CACHE = f"{VOLUME_ROOT}/proteinmpnn_cache"
+VOLUME_BINDCRAFT_CACHE = f"{VOLUME_ROOT}/bindcraft_cache"
 
 # Modal job config
 JOB_COMPLETE_MARKER = "job.log"
@@ -40,6 +41,8 @@ MINUTES_15 = 15 * 60
 MINUTES_20 = 20 * 60
 MINUTES_30 = 30 * 60
 MINUTES_40 = 40 * 60
+MINUTES_60 = 60 * 60
+HOURS_6 = 6 * 60 * 60
 
 # Modal GPU types
 GPU_T4 = "T4"
@@ -86,6 +89,20 @@ PROTEINMPNN_CHECKPOINTS = (
     "proteinmpnn_v_48_020.pt",
     "proteinmpnn_v_48_030.pt",
 )
+
+# BindCraft
+BINDCRAFT_REPO = "https://github.com/martinpacesa/BindCraft.git"
+BINDCRAFT_COMMIT = "b971db42ba6e091afab63ccb30ae02215150a990"
+BINDCRAFT_DIR = "/opt/BindCraft"
+BINDCRAFT_SPEC = f"BindCraft@{BINDCRAFT_COMMIT}"
+COLABDESIGN_SPEC = "git+https://github.com/sokrypton/ColabDesign.git"
+PYROSETTA_FIND_LINKS = "https://west.rosettacommons.org/pyrosetta/quarterly/release.cxx11thread.serialization"
+PYROSETTA_SPEC = "pyrosetta==2026.3"
+BINDCRAFT_AF2_WEIGHTS_URL = "https://storage.googleapis.com/alphafold/alphafold_params_2022-12-06.tar"
+BINDCRAFT_AF2_PARAMS_DIR = f"{VOLUME_BINDCRAFT_CACHE}/params"
+BINDCRAFT_AF2_PARAMS_MARKER = "params_model_5_ptm.npz"
+BINDCRAFT_SETTINGS_ADVANCED_DIR = f"{BINDCRAFT_DIR}/settings_advanced"
+BINDCRAFT_SETTINGS_FILTERS_DIR = f"{BINDCRAFT_DIR}/settings_filters"
 
 # Amino acids
 ONE_LETTER_AMINO_ACIDS = "ACDEFGHIKLMNPQRSTVWY"

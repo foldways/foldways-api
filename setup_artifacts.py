@@ -4,6 +4,9 @@ from pathlib import Path
 import modal
 
 from constants import (
+    BINDCRAFT_AF2_PARAMS_DIR,
+    BINDCRAFT_AF2_PARAMS_MARKER,
+    BINDCRAFT_AF2_WEIGHTS_URL,
     BOLTZ2_WEIGHTS_REPO,
     BOLTZ2_WEIGHTS_REVISION,
     BOLTZGEN_DATA_REPO,
@@ -14,6 +17,7 @@ from constants import (
     LOCAL_MOCKS_DIR,
     MINUTES_20,
     MINUTES_30,
+    MINUTES_60,
     PROTEINMPNN_CHECKPOINTS,
     PROTEINMPNN_WEIGHTS_URL,
     VOLUME_BOLTZ2_CACHE,
@@ -54,11 +58,7 @@ def download_boltz2_weights():
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
 def download_esmc_weights():
-    """Pre-stage ESMC weights.
-
-    Weights land in the HF cache on the volume, so both the esm loader and
-    transformers find them there.
-    """
+    """Pre-stage ESMC weights."""
     from huggingface_hub import snapshot_download  # pyright: ignore[reportMissingImports]
 
     volume.reload()
@@ -74,11 +74,7 @@ def download_esmc_weights():
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
 def download_esmfold2_weights():
-    """Pre-stage ESMFold2 weights and the ESMC 6B backbone it depends on.
-
-    ESMFold2 loads through transformers and pulls the ESMC 6B model named in its
-    config, so both repos are staged into the same HF cache on the volume.
-    """
+    """Pre-stage ESMFold2 weights and the ESMC 6B backbone it depends on."""
     from huggingface_hub import snapshot_download  # pyright: ignore[reportMissingImports]
 
     volume.reload()
@@ -95,11 +91,7 @@ def download_esmfold2_weights():
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
 def download_boltzgen_weights():
-    """Pre-stage BoltzGen weights and inference data.
-
-    BoltzGen resolves its checkpoints and the mols dataset from these two repos
-    through its --cache, which is the same HF cache the snapshot lands in.
-    """
+    """Pre-stage BoltzGen weights and inference data."""
     from huggingface_hub import snapshot_download  # pyright: ignore[reportMissingImports]
 
     volume.reload()
@@ -115,11 +107,7 @@ def download_boltzgen_weights():
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
 def download_proteinmpnn_weights():
-    """Pre-stage ProteinMPNN checkpoints from the IPD file server.
-
-    These are plain .pt files served over HTTP, not a Hugging Face repo, so they
-    are fetched directly into the cache the service points its checkpoint at.
-    """
+    """Pre-stage ProteinMPNN checkpoints from the IPD file server."""
     import urllib.request
 
     volume.reload()
@@ -133,6 +121,32 @@ def download_proteinmpnn_weights():
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
     logger.info(f"ProteinMPNN weights ready at {VOLUME_PROTEINMPNN_CACHE}")
+
+
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
+def download_bindcraft_weights():
+    """Pre-stage the AlphaFold2 parameters BindCraft designs against."""
+    import tarfile
+    import tempfile
+    import urllib.request
+
+    volume.reload()
+    params_path = Path(BINDCRAFT_AF2_PARAMS_DIR)
+    if (params_path / BINDCRAFT_AF2_PARAMS_MARKER).exists():
+        logger.info("BindCraft AlphaFold2 params already on the volume, skipping")
+        return
+    params_path.mkdir(parents=True, exist_ok=True)
+    logger.info(f"Downloading BindCraft AlphaFold2 params: {BINDCRAFT_AF2_WEIGHTS_URL}")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        archive_path = Path(tmpdir) / "alphafold_params.tar"
+        urllib.request.urlretrieve(BINDCRAFT_AF2_WEIGHTS_URL, archive_path)
+        logger.info(f"Extracting BindCraft AlphaFold2 params to {BINDCRAFT_AF2_PARAMS_DIR}")
+        with tarfile.open(archive_path) as tar:
+            tar.extractall(params_path, filter="data")
+    if not (params_path / BINDCRAFT_AF2_PARAMS_MARKER).exists():
+        raise RuntimeError(f"AlphaFold2 params missing {BINDCRAFT_AF2_PARAMS_MARKER} after extraction")
+    volume.commit()
+    logger.info(f"BindCraft AlphaFold2 params ready at {BINDCRAFT_AF2_PARAMS_DIR}")
 
 
 def upload_mocks():
@@ -151,5 +165,6 @@ def main():
     download_esmfold2_weights.remote()
     download_boltzgen_weights.remote()
     download_proteinmpnn_weights.remote()
+    download_bindcraft_weights.remote()
     upload_mocks()
     logger.info("Artifact setup complete.")

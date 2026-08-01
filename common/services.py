@@ -3,7 +3,7 @@ from dataclasses import dataclass
 import modal
 from pydantic import BaseModel
 
-from services import boltz2, boltzgen, esmc, esmfold2, proteinmpnn
+from services import bindcraft, boltz2, boltzgen, esmc, esmfold2, proteinmpnn
 
 
 @dataclass(frozen=True)
@@ -44,5 +44,10 @@ SERVICES = {
         description="ProteinMPNN inverse folding, sequence design for a backbone.",
         params=proteinmpnn.ProteinMPNNParams,
         run=proteinmpnn.run,
+    ),
+    "bindcraft": ServiceEntry(
+        description="BindCraft de novo binder design against a target structure.",
+        params=bindcraft.BindCraftParams,
+        run=bindcraft.run,
     ),
 }
