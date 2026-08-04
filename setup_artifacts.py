@@ -14,6 +14,7 @@ from constants import (
     ESMC_600M_WEIGHTS_REPO,
     ESMFOLD2_LM_REPO,
     ESMFOLD2_WEIGHTS_REPO,
+    LIGANDMPNN_CHECKPOINTS,
     LOCAL_MOCKS_DIR,
     MINUTES_20,
     MINUTES_30,
@@ -24,6 +25,7 @@ from constants import (
     VOLUME_BOLTZGEN_CACHE,
     VOLUME_ESMC_CACHE,
     VOLUME_ESMFOLD2_CACHE,
+    VOLUME_LIGANDMPNN_CACHE,
     VOLUME_MOCKS_DIR,
     VOLUME_PROTEINMPNN_CACHE,
     VOLUME_ROOT,
@@ -123,6 +125,24 @@ def download_proteinmpnn_weights():
     logger.info(f"ProteinMPNN weights ready at {VOLUME_PROTEINMPNN_CACHE}")
 
 
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
+def download_ligandmpnn_weights():
+    """Pre-stage LigandMPNN checkpoints from the IPD file server."""
+    import urllib.request
+
+    volume.reload()
+    cache_path = Path(VOLUME_LIGANDMPNN_CACHE)
+    if cache_path.exists() and any(cache_path.iterdir()):
+        logger.info(f"LigandMPNN weights already on the volume, skipping {len(LIGANDMPNN_CHECKPOINTS)} checkpoints")
+        return
+    cache_path.mkdir(parents=True, exist_ok=True)
+    for filename in LIGANDMPNN_CHECKPOINTS:
+        logger.info(f"Downloading LigandMPNN checkpoint: {filename}")
+        urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
+    volume.commit()
+    logger.info(f"LigandMPNN weights ready at {VOLUME_LIGANDMPNN_CACHE}")
+
+
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
 def download_bindcraft_weights():
     """Pre-stage the AlphaFold2 parameters BindCraft designs against."""
@@ -165,6 +185,7 @@ def main():
     download_esmfold2_weights.remote()
     download_boltzgen_weights.remote()
     download_proteinmpnn_weights.remote()
+    download_ligandmpnn_weights.remote()
     download_bindcraft_weights.remote()
     upload_mocks()
     logger.info("Artifact setup complete.")
