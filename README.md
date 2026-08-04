@@ -81,7 +81,7 @@ Supported and planned services.
 | ESM3          | ⬜ Planned   | [Biohub/esm](https://github.com/Biohub/esm)                             | De novo design       |
 | ProteinMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
 | LigandMPNN    | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
-| SolubleMPNN   | ⬜ Planned   | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
+| SolubleMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
 | ThermoMPNN    | ⬜ Planned   | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)     | Property prediction  |
 | ABodyBuilder3 | ⬜ Planned   | [Exscientia/abodybuilder3](https://github.com/Exscientia/abodybuilder3) | Structure prediction |
 | BindCraft     | ✅ Supported | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)     | De novo design       |
