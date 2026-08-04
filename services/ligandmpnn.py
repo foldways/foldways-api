@@ -68,7 +68,10 @@ class LigandMPNNParams(BaseModel):
         default=False,
         description="Whether to use side-chain atoms of fixed residues as additional context.",
     )
-    seed: int = Field(default=0, description="Random seed for reproducible sampling.")
+    seed: int = Field(
+        default=0,
+        description="Random seed for sampling. Passing 0 draws a fresh random seed each time. Pass a nonzero value for reproducible runs.",
+    )
 
 
 @app.function(
