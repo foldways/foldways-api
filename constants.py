@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.4.0"
+API_VERSION = "0.5.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -21,6 +21,7 @@ VOLUME_ESMFOLD2_CACHE = f"{VOLUME_ROOT}/esmfold2_cache"
 VOLUME_BOLTZGEN_CACHE = f"{VOLUME_ROOT}/boltzgen_cache"
 VOLUME_PROTEINMPNN_CACHE = f"{VOLUME_ROOT}/proteinmpnn_cache"
 VOLUME_LIGANDMPNN_CACHE = f"{VOLUME_ROOT}/ligandmpnn_cache"
+VOLUME_SOLUBLEMPNN_CACHE = f"{VOLUME_ROOT}/solublempnn_cache"
 VOLUME_BINDCRAFT_CACHE = f"{VOLUME_ROOT}/bindcraft_cache"
 
 # Modal job config
@@ -84,6 +85,7 @@ LIGANDMPNN_COMMIT = "26ec57ac976ade5379920dbd43c7f97a91cf82de"
 LIGANDMPNN_DIR = "/opt/LigandMPNN"
 PROTEINMPNN_SPEC = f"LigandMPNN@{LIGANDMPNN_COMMIT}"
 LIGANDMPNN_SPEC = f"LigandMPNN@{LIGANDMPNN_COMMIT}"
+SOLUBLEMPNN_SPEC = f"LigandMPNN@{LIGANDMPNN_COMMIT}"
 PROTEINMPNN_WEIGHTS_URL = "https://files.ipd.uw.edu/pub/ligandmpnn"
 PROTEINMPNN_CHECKPOINTS = (
     "proteinmpnn_v_48_002.pt",
@@ -96,6 +98,12 @@ LIGANDMPNN_CHECKPOINTS = (
     "ligandmpnn_v_32_010_25.pt",
     "ligandmpnn_v_32_020_25.pt",
     "ligandmpnn_v_32_030_25.pt",
+)
+SOLUBLEMPNN_CHECKPOINTS = (
+    "solublempnn_v_48_002.pt",
+    "solublempnn_v_48_010.pt",
+    "solublempnn_v_48_020.pt",
+    "solublempnn_v_48_030.pt",
 )
 
 # BindCraft
