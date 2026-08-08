@@ -78,7 +78,7 @@ Supported and planned services.
 | BoltzGen      | ✅ Supported | [HannesStark/boltzgen](https://github.com/HannesStark/boltzgen)         | De novo design       |
 | ESMC          | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                             | Representation       |
 | ESMFold2      | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                             | Structure prediction |
-| ESM3          | ⬜ Planned   | [Biohub/esm](https://github.com/Biohub/esm)                             | De novo design       |
+| ESM3          | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                             | De novo design       |
 | ProteinMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
 | LigandMPNN    | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
 | SolubleMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |

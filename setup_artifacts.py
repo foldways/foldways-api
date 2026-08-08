@@ -11,6 +11,7 @@ from constants import (
     BOLTZ2_WEIGHTS_REVISION,
     BOLTZGEN_DATA_REPO,
     BOLTZGEN_MODEL_REPO,
+    ESM3_WEIGHTS_REPO,
     ESMC_600M_WEIGHTS_REPO,
     ESMFOLD2_LM_REPO,
     ESMFOLD2_WEIGHTS_REPO,
@@ -24,6 +25,7 @@ from constants import (
     SOLUBLEMPNN_CHECKPOINTS,
     VOLUME_BOLTZ2_CACHE,
     VOLUME_BOLTZGEN_CACHE,
+    VOLUME_ESM3_CACHE,
     VOLUME_ESMC_CACHE,
     VOLUME_ESMFOLD2_CACHE,
     VOLUME_LIGANDMPNN_CACHE,
@@ -91,6 +93,26 @@ def download_esmfold2_weights():
         snapshot_download(repo_id=repo, cache_dir=VOLUME_ESMFOLD2_CACHE)
     volume.commit()
     logger.info(f"ESMFold2 weights ready at {VOLUME_ESMFOLD2_CACHE}")
+
+
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
+def download_esm3_weights():
+    """Pre-stage ESM3-open weights.
+
+    The single repo holds the main model plus the structure and function submodels
+    ESM3 loads, so one snapshot covers everything the service resolves at load time.
+    """
+    from huggingface_hub import snapshot_download  # pyright: ignore[reportMissingImports]
+
+    volume.reload()
+    cache_path = Path(VOLUME_ESM3_CACHE)
+    if cache_path.exists() and any(cache_path.iterdir()):
+        logger.info(f"ESM3 weights already on the volume, skipping {ESM3_WEIGHTS_REPO}")
+        return
+    logger.info(f"Downloading ESM3 weights: {ESM3_WEIGHTS_REPO}")
+    snapshot_download(repo_id=ESM3_WEIGHTS_REPO, cache_dir=VOLUME_ESM3_CACHE)
+    volume.commit()
+    logger.info(f"ESM3 weights ready at {VOLUME_ESM3_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -203,6 +225,7 @@ def main():
     download_boltz2_weights.remote()
     download_esmc_weights.remote()
     download_esmfold2_weights.remote()
+    download_esm3_weights.remote()
     download_boltzgen_weights.remote()
     download_proteinmpnn_weights.remote()
     download_ligandmpnn_weights.remote()
