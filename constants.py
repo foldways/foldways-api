@@ -18,6 +18,7 @@ VOLUME_MOCKS_DIR = f"{VOLUME_ROOT}/mocks"
 VOLUME_BOLTZ2_CACHE = f"{VOLUME_ROOT}/boltz2_cache"
 VOLUME_ESMC_CACHE = f"{VOLUME_ROOT}/esmc_cache"
 VOLUME_ESMFOLD2_CACHE = f"{VOLUME_ROOT}/esmfold2_cache"
+VOLUME_ESM3_CACHE = f"{VOLUME_ROOT}/esm3_cache"
 VOLUME_BOLTZGEN_CACHE = f"{VOLUME_ROOT}/boltzgen_cache"
 VOLUME_PROTEINMPNN_CACHE = f"{VOLUME_ROOT}/proteinmpnn_cache"
 VOLUME_LIGANDMPNN_CACHE = f"{VOLUME_ROOT}/ligandmpnn_cache"
@@ -72,7 +73,9 @@ ESMC_600M_WEIGHTS_REPO = "biohub/esmc-600m-2024-12"
 ESMC_6B_WEIGHTS_REPO = "biohub/esmc-6b-2024-12"
 ESMFOLD2_WEIGHTS_REPO = "biohub/ESMFold2"
 ESMFOLD2_LM_REPO = "biohub/ESMC-6B"
+ESM3_SPEC = ESMC_SPEC
 ESM3_WEIGHTS_REPO = "biohub/esm3-sm-open-v1"
+ESM3_MODEL_NAME = "esm3-sm-open-v1"
 
 # BoltzGen
 BOLTZGEN_SPEC = "boltzgen==0.3.2"

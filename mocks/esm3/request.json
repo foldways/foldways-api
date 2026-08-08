@@ -1,0 +1,12 @@
+{
+  "service": "esm3",
+  "name": "esm3-mock",
+  "params": {
+    "prompts": [
+      "___________________________________________________DQATSLRILNNGHAFNVEFDDSQDKAVLKGGPLDGTYRLIQFHFHWGSLDGQGSEHTVDKKKYAAELHLVHWNTKYGDFGKAVQQPDGLAVLGIFLKVGSAKPGLQKVVDVLDSIKTKGKSADFTNFDPRGLLPESLDYWTYPGSLTTPP___________________________________________________________"
+    ],
+    "num_steps": 8,
+    "temperature": 0.7,
+    "predict_structure": true
+  }
+}
