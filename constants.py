@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.6.0"
+API_VERSION = "0.7.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -108,6 +108,13 @@ SOLUBLEMPNN_CHECKPOINTS = (
     "solublempnn_v_48_020.pt",
     "solublempnn_v_48_030.pt",
 )
+
+# ThermoMPNN
+THERMOMPNN_REPO = "https://github.com/Kuhlman-Lab/ThermoMPNN.git"
+THERMOMPNN_COMMIT = "2b04fd370e399911b1fa5848112cc9013f084110"
+THERMOMPNN_DIR = "/opt/ThermoMPNN"
+THERMOMPNN_SPEC = f"ThermoMPNN@{THERMOMPNN_COMMIT}"
+THERMOMPNN_MODEL_PATH = f"{THERMOMPNN_DIR}/models/thermoMPNN_default.pt"
 
 # BindCraft
 BINDCRAFT_REPO = "https://github.com/martinpacesa/BindCraft.git"
