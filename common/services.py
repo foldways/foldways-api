@@ -3,7 +3,19 @@ from dataclasses import dataclass
 import modal
 from pydantic import BaseModel
 
-from services import bindcraft, boltz2, boltzgen, esm3, esmc, esmfold2, ligandmpnn, proteinmpnn, solublempnn, thermompnn
+from services import (
+    bindcraft,
+    boltz2,
+    boltzgen,
+    chai,
+    esm3,
+    esmc,
+    esmfold2,
+    ligandmpnn,
+    proteinmpnn,
+    solublempnn,
+    thermompnn,
+)
 
 
 @dataclass(frozen=True)
@@ -64,6 +76,11 @@ SERVICES = {
         description="ThermoMPNN point-mutation stability (ddG) prediction by site-saturation mutagenesis.",
         params=thermompnn.ThermoMPNNParams,
         run=thermompnn.run,
+    ),
+    "chai": ServiceEntry(
+        description="Chai-1 all-atom structure prediction for proteins, ligands, nucleic acids, and glycans.",
+        params=chai.ChaiParams,
+        run=chai.run,
     ),
     "bindcraft": ServiceEntry(
         description="BindCraft de novo binder design against a target structure.",

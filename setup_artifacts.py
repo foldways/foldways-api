@@ -11,6 +11,11 @@ from constants import (
     BOLTZ2_WEIGHTS_REVISION,
     BOLTZGEN_DATA_REPO,
     BOLTZGEN_MODEL_REPO,
+    CHAI_ASSETS_URL,
+    CHAI_COMPONENTS,
+    CHAI_CONFORMERS_FILE,
+    CHAI_ESM_LOCAL_PATH,
+    CHAI_ESM_URL_PATH,
     ESM3_WEIGHTS_REPO,
     ESMC_600M_WEIGHTS_REPO,
     ESMFOLD2_LM_REPO,
@@ -25,6 +30,7 @@ from constants import (
     SOLUBLEMPNN_CHECKPOINTS,
     VOLUME_BOLTZ2_CACHE,
     VOLUME_BOLTZGEN_CACHE,
+    VOLUME_CHAI_CACHE,
     VOLUME_ESM3_CACHE,
     VOLUME_ESMC_CACHE,
     VOLUME_ESMFOLD2_CACHE,
@@ -113,6 +119,37 @@ def download_esm3_weights():
     snapshot_download(repo_id=ESM3_WEIGHTS_REPO, cache_dir=VOLUME_ESM3_CACHE)
     volume.commit()
     logger.info(f"ESM3 weights ready at {VOLUME_ESM3_CACHE}")
+
+
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
+def download_chai_weights():
+    """Pre-stage Chai-1 model components, conformers, and the ESM2 embedding weights.
+
+    Chai fetches these lazily from its CDN at inference time into CHAI_DOWNLOADS_DIR.
+    Staging them to the volume at the exact paths Chai expects lets the service run
+    without any download. The ESM2 file is served under esm2/ but read back from esm/,
+    so its local path differs from its URL path.
+    """
+    import urllib.request
+
+    volume.reload()
+    cache_path = Path(VOLUME_CHAI_CACHE)
+    downloads = [
+        (f"{CHAI_ASSETS_URL}/models_v2/{component}", f"models_v2/{component}") for component in CHAI_COMPONENTS
+    ]
+    downloads.append((f"{CHAI_ASSETS_URL}/{CHAI_CONFORMERS_FILE}", CHAI_CONFORMERS_FILE))
+    downloads.append((f"{CHAI_ASSETS_URL}/{CHAI_ESM_URL_PATH}", CHAI_ESM_LOCAL_PATH))
+
+    missing = [(url, cache_path / rel) for url, rel in downloads if not (cache_path / rel).exists()]
+    if not missing:
+        logger.info("Chai-1 weights already on the volume, skipping")
+        return
+    for url, dest in missing:
+        logger.info(f"Downloading Chai-1 weight: {url}")
+        dest.parent.mkdir(parents=True, exist_ok=True)
+        urllib.request.urlretrieve(url, dest)
+    volume.commit()
+    logger.info(f"Chai-1 weights ready at {VOLUME_CHAI_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -226,6 +263,7 @@ def main():
     download_esmc_weights.remote()
     download_esmfold2_weights.remote()
     download_esm3_weights.remote()
+    download_chai_weights.remote()
     download_boltzgen_weights.remote()
     download_proteinmpnn_weights.remote()
     download_ligandmpnn_weights.remote()

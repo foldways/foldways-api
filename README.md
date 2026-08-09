@@ -85,7 +85,7 @@ Supported and planned services.
 | ThermoMPNN    | ✅ Supported | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)     | Property prediction  |
 | ABodyBuilder3 | ⬜ Planned   | [Exscientia/abodybuilder3](https://github.com/Exscientia/abodybuilder3) | Structure prediction |
 | BindCraft     | ✅ Supported | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)     | De novo design       |
-| Chai          | ⬜ Planned   | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)     | Structure prediction |
+| Chai          | ✅ Supported | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)     | Structure prediction |
 | OpenDDE       | ⬜ Planned   | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)     | Structure prediction |
 | Protenix      | ⬜ Planned   | [bytedance/Protenix](https://github.com/bytedance/Protenix)             | Structure prediction |
 | VESM          | ⬜ Planned   | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                   | Property prediction  |
