@@ -1,6 +1,10 @@
->input, T=0.1, seed=86402, num_res=93, num_ligand_res=93, use_ligand_context=True, ligand_cutoff_distance=8.0, batch_size=1, number_of_batches=2, model_path=/data/solublempnn_cache/solublempnn_v_48_020.pt
+>input, T=0.15, seed=7, num_res=90, num_ligand_res=90, use_ligand_context=True, ligand_cutoff_distance=8.0, batch_size=2, number_of_batches=2, model_path=/data/solublempnn_cache/solublempnn_v_48_020.pt
 MDSAITLWQFLLQLLQKPQNKHMICWTSNDGQFKLLQAEEVARLWGIRKNKPNMNYDKLSRALRYYYVKNIIKKVNGQKFVYKFVSYPEILNM
->input, id=1, T=0.1, seed=86402, overall_confidence=0.4123, ligand_confidence=0.4123, seq_rec=0.4839
-GTSPISLPEFLLKLLSDPKYDDKIRWTSDDGTFQLVDPEAVAKLWGKEKGEPDMNYEKLEEELKEYEKKGIIEKVEGKENTYRFVDYPGILYP
->input, id=2, T=0.1, seed=86402, overall_confidence=0.4067, ligand_confidence=0.4067, seq_rec=0.5054
-GKSKMSLVEFLLSLLSDKKYDDIIEWTSDDGTFQLKKPEEVAKLWGKEWGEPDMNYEKLKEELDKYEEKGIIKKVEGKKNTYKFVNYPEILYP
+>input, id=0, T=0.15, seed=7, overall_confidence=0.3755, ligand_confidence=0.3755, seq_rec=0.4667
+MDSKTTVVEFLLELLSDPKYADKIKWTSKDGTFQLTDPEAVAAEWGKVKGKPDMDAASLNKELDAYEAKNIIKKVAGKPNTYQFVDYPGILYP
+>input, id=1, T=0.15, seed=7, overall_confidence=0.3350, ligand_confidence=0.3350, seq_rec=0.4222
+MDSPTTLLEFLLELLSDPAYASKIKWVSDDGGFQLIDAEAVAAEWGKAKGKPDMDAASLNAELAKLEAAKLIAKVAGAPNTYRFVDYPGILYP
+>input, id=2, T=0.15, seed=7, overall_confidence=0.3692, ligand_confidence=0.3692, seq_rec=0.4111
+MDSPTTLLEFLLELLSDPAYADKIRWVSDDGTFELVDPEAVAAEWGKVKGRPNMDAAALNAELAKYEAAGLIARVAGAPNVYRIVDYPGILYP
+>input, id=3, T=0.15, seed=7, overall_confidence=0.3627, ligand_confidence=0.3627, seq_rec=0.4111
+MDSPTTLLEFLLSLLSDPAHADAIRWVSDDGRFQLVDAEAVAARWGAVKGRPDMDAAALNAELAKYEAAGLIKRVAGAPNTYQIVDYPGILYP
