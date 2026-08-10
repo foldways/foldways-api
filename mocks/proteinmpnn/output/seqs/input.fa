@@ -1,6 +1,10 @@
->input, T=0.1, seed=47715, num_res=93, num_ligand_res=93, use_ligand_context=True, ligand_cutoff_distance=8.0, batch_size=1, number_of_batches=2, model_path=/data/proteinmpnn_cache/proteinmpnn_v_48_020.pt
+>input, T=0.15, seed=7, num_res=90, num_ligand_res=90, use_ligand_context=True, ligand_cutoff_distance=8.0, batch_size=2, number_of_batches=2, model_path=/data/proteinmpnn_cache/proteinmpnn_v_48_020.pt
 MDSAITLWQFLLQLLQKPQNKHMICWTSNDGQFKLLQAEEVARLWGIRKNKPNMNYDKLSRALRYYYVKNIIKKVNGQKFVYKFVSYPEILNM
->input, id=1, T=0.1, seed=47715, overall_confidence=0.3825, ligand_confidence=0.3825, seq_rec=0.4624
-GKSKMSLHEFLLELLSNPEYDDIIEWVSDNGEFKLKDPEKLAKLWGEKKGEPDMNYEKMKKLLDKYKKKKIIEWVEGKPNTYKFVNYPEILNK
->input, id=2, T=0.1, seed=47715, overall_confidence=0.3763, ligand_confidence=0.3763, seq_rec=0.5054
-GTSSMSLPEFLLSLLSKPEYAHLITWTSDNGEFELLKPEEVAKLWGKLKGEPDMNAKKLFELLDKYEEKGIIERVEGKPNHYRFVNYPEILNP
+>input, id=0, T=0.15, seed=7, overall_confidence=0.3272, ligand_confidence=0.3272, seq_rec=0.4000
+MDSDTTLLDFLAELLADPAYADIIAWTSDDGAFELKDPEAVAKLWGAAKGKPDMDAATMFAELAAYEALGLIARVAGRPNTYRFVAYPAYLYP
+>input, id=1, T=0.15, seed=7, overall_confidence=0.3168, ligand_confidence=0.3168, seq_rec=0.3889
+MDSATTLLDFLAELLADPAYAAIIRRVSDNGEFELIDPEAVAALWGAAKGKPDMDAAKMFAELAKYEAAGKIARVAGRPNTYRFVAYPAYLYP
+>input, id=2, T=0.15, seed=7, overall_confidence=0.3301, ligand_confidence=0.3301, seq_rec=0.4778
+MDSATTLLEFLDELLSDPAYADIIAWTSDNGTFKLLKPEEVAALWGKKKGEPNMNAAKLFALLAKYVAKKLIAPVAGEPNTYKFVNYPAYRYP
+>input, id=3, T=0.15, seed=7, overall_confidence=0.3271, ligand_confidence=0.3271, seq_rec=0.4778
+MDSATTLLDFLLSLLSDPAYADIIAWISDNGAFKLLKPEAVAALWGAEKGLPDMDAAKLDALLAKYEAKGLIKKVEGEPNAYQFVNYPEYLYP
