@@ -62,11 +62,10 @@ that produced them and stay available after the GPU has scaled down.
 Each service publishes its parameter schema at `GET /services/{name}`, and the
 whole API is browsable as interactive API docs after deployment to Modal.
 
-Boltz-2 requires MSAs. Foldways API uses the
-[ColabFold MSA server](https://github.com/sokrypton/ColabFold), so each protein
-sequence you submit is sent to that third-party service. This is done to avoid
-storing large MSA files in the Modal volume. It is currently always on and not
-configurable.
+Boltz-2 and Chai use multiple sequence alignments (MSAs). Foldways API builds
+them with the [ColabFold MSA server](https://github.com/sokrypton/ColabFold), so
+each protein sequence you submit is sent to that third-party service. This is
+done to avoid storing large MSA files in the Modal volume.
 
 ## Services
 

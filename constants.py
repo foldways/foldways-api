@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.7.0"
+API_VERSION = "0.8.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -111,7 +111,8 @@ SOLUBLEMPNN_CHECKPOINTS = (
 )
 
 # Chai-1
-CHAI_SPEC = "chai_lab==0.6.1"
+CHAI_COMMIT = "66c38d1fe5c6756a89ff8596b1dea87d305ec06f"
+CHAI_SPEC = f"chai_lab @ git+https://github.com/chaidiscovery/chai-lab.git@{CHAI_COMMIT}"
 CHAI_ASSETS_URL = "https://chaiassets.com/chai1-inference-depencencies"
 CHAI_COMPONENTS = (
     "feature_embedding.pt",

@@ -130,6 +130,7 @@ def download_chai_weights():
     without any download. The ESM2 file is served under esm2/ but read back from esm/,
     so its local path differs from its URL path.
     """
+    import shutil
     import urllib.request
 
     volume.reload()
@@ -147,7 +148,11 @@ def download_chai_weights():
     for url, dest in missing:
         logger.info(f"Downloading Chai-1 weight: {url}")
         dest.parent.mkdir(parents=True, exist_ok=True)
-        urllib.request.urlretrieve(url, dest)
+        request = urllib.request.Request(url, headers={"User-Agent": "python-requests/2.32"})
+        tmp = dest.with_suffix(dest.suffix + ".tmp")
+        with urllib.request.urlopen(request) as response, open(tmp, "wb") as f:
+            shutil.copyfileobj(response, f)
+        tmp.rename(dest)
     volume.commit()
     logger.info(f"Chai-1 weights ready at {VOLUME_CHAI_CACHE}")
 
