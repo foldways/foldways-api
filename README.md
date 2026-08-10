@@ -62,11 +62,10 @@ that produced them and stay available after the GPU has scaled down.
 Each service publishes its parameter schema at `GET /services/{name}`, and the
 whole API is browsable as interactive API docs after deployment to Modal.
 
-Boltz-2 requires MSAs. Foldways API uses the
-[ColabFold MSA server](https://github.com/sokrypton/ColabFold), so each protein
-sequence you submit is sent to that third-party service. This is done to avoid
-storing large MSA files in the Modal volume. It is currently always on and not
-configurable.
+Boltz-2 and Chai use multiple sequence alignments (MSAs). Foldways API builds
+them with the [ColabFold MSA server](https://github.com/sokrypton/ColabFold), so
+each protein sequence you submit is sent to that third-party service. This is
+done to avoid storing large MSA files in the Modal volume.
 
 ## Services
 
@@ -85,7 +84,7 @@ Supported and planned services.
 | ThermoMPNN    | ✅ Supported | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)     | Property prediction  |
 | ABodyBuilder3 | ⬜ Planned   | [Exscientia/abodybuilder3](https://github.com/Exscientia/abodybuilder3) | Structure prediction |
 | BindCraft     | ✅ Supported | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)     | De novo design       |
-| Chai          | ⬜ Planned   | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)     | Structure prediction |
+| Chai          | ✅ Supported | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)     | Structure prediction |
 | OpenDDE       | ⬜ Planned   | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)     | Structure prediction |
 | Protenix      | ⬜ Planned   | [bytedance/Protenix](https://github.com/bytedance/Protenix)             | Structure prediction |
 | VESM          | ⬜ Planned   | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                   | Property prediction  |

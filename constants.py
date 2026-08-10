@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.7.0"
+API_VERSION = "0.8.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -24,6 +24,7 @@ VOLUME_PROTEINMPNN_CACHE = f"{VOLUME_ROOT}/proteinmpnn_cache"
 VOLUME_LIGANDMPNN_CACHE = f"{VOLUME_ROOT}/ligandmpnn_cache"
 VOLUME_SOLUBLEMPNN_CACHE = f"{VOLUME_ROOT}/solublempnn_cache"
 VOLUME_BINDCRAFT_CACHE = f"{VOLUME_ROOT}/bindcraft_cache"
+VOLUME_CHAI_CACHE = f"{VOLUME_ROOT}/chai_cache"
 
 # Modal job config
 JOB_COMPLETE_MARKER = "job.log"
@@ -108,6 +109,22 @@ SOLUBLEMPNN_CHECKPOINTS = (
     "solublempnn_v_48_020.pt",
     "solublempnn_v_48_030.pt",
 )
+
+# Chai-1
+CHAI_COMMIT = "66c38d1fe5c6756a89ff8596b1dea87d305ec06f"
+CHAI_SPEC = f"chai_lab @ git+https://github.com/chaidiscovery/chai-lab.git@{CHAI_COMMIT}"
+CHAI_ASSETS_URL = "https://chaiassets.com/chai1-inference-depencencies"
+CHAI_COMPONENTS = (
+    "feature_embedding.pt",
+    "bond_loss_input_proj.pt",
+    "token_embedder.pt",
+    "trunk.pt",
+    "diffusion_module.pt",
+    "confidence_head.pt",
+)
+CHAI_CONFORMERS_FILE = "conformers_v1.apkl"
+CHAI_ESM_URL_PATH = "esm2/traced_sdpa_esm2_t36_3B_UR50D_fp16.pt"
+CHAI_ESM_LOCAL_PATH = "esm/traced_sdpa_esm2_t36_3B_UR50D_fp16.pt"
 
 # ThermoMPNN
 THERMOMPNN_REPO = "https://github.com/Kuhlman-Lab/ThermoMPNN.git"
