@@ -200,16 +200,18 @@ def download_proteinmpnn_weights():
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
 def download_ligandmpnn_weights():
-    """Pre-stage LigandMPNN checkpoints from the IPD file server."""
+    """Pre-stage LigandMPNN checkpoints and the shared side-chain packer."""
     import urllib.request
 
     volume.reload()
     cache_path = Path(VOLUME_LIGANDMPNN_CACHE)
-    if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"LigandMPNN weights already on the volume, skipping {len(LIGANDMPNN_CHECKPOINTS)} checkpoints")
-        return
     cache_path.mkdir(parents=True, exist_ok=True)
-    for filename in LIGANDMPNN_CHECKPOINTS:
+    checkpoints = (*LIGANDMPNN_CHECKPOINTS, LIGANDMPNN_SC_CHECKPOINT)
+    missing = [filename for filename in checkpoints if not (cache_path / filename).exists()]
+    if not missing:
+        logger.info(f"LigandMPNN weights already on the volume, skipping {len(checkpoints)} checkpoints")
+        return
+    for filename in missing:
         logger.info(f"Downloading LigandMPNN checkpoint: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
