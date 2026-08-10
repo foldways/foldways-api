@@ -1,9 +1,11 @@
 import io
+import json
 import shutil
 import zipfile
 from collections.abc import Mapping
 from datetime import UTC, datetime
 from pathlib import Path
+from typing import Protocol
 
 import modal
 from modal.types import InputStatus
@@ -224,3 +226,94 @@ def get_batch_status(job_state_counts: Mapping[JobState, int]) -> BatchState:
     if any(state != JobState.COMPLETE and n for state, n in job_state_counts.items()):
         return BatchState.COMPLETED_WITH_FAILURES
     return BatchState.COMPLETED
+
+
+class LigandMpnnDesignParams(Protocol):
+    """The shared design parameters for LigandMPNN, ProteinMPNN, and SolubleMPNN models."""
+
+    batch_size: int
+    fixed_residues: str | None
+    redesigned_residues: str | None
+    chains_to_design: str | None
+    parse_these_chains_only: str | None
+    bias_aa: str | None
+    omit_aa: str | None
+    bias_aa_per_residue: dict | None
+    omit_aa_per_residue: dict | None
+    symmetry_residues: str | None
+    symmetry_weights: str | None
+    homo_oligomer: bool
+    save_stats: bool
+    parse_atoms_with_zero_occupancy: bool
+    zero_indexed: bool
+    pack_side_chains: bool
+    number_of_packs_per_design: int
+    sc_num_denoising_steps: int
+    sc_num_samples: int
+    repack_everything: bool
+
+
+def build_shared_args(params: LigandMpnnDesignParams, tmpdir: Path, checkpoint_path_sc: str) -> list[str]:
+    """Translate the shared LigandMPNN, ProteinMPNN, and SolubleMPNN, params into run.py CLI flags.
+
+    Shared by ligandmpnn, proteinmpnn, and solublempnn, which invoke the same run.py.
+    Per-residue bias and omit maps are dicts in the API, written here to temp JSON
+    files since run.py reads them from disk. batch_size is always passed. run.py takes
+    booleans as 0/1 ints. The packing flags are emitted only when pack_side_chains is
+    set, and checkpoint_path_sc is the staged side-chain packer the caller supplies.
+    """
+    args: list[str] = ["--batch_size", str(params.batch_size)]
+
+    if params.fixed_residues:
+        args += ["--fixed_residues", params.fixed_residues]
+    if params.redesigned_residues:
+        args += ["--redesigned_residues", params.redesigned_residues]
+    if params.chains_to_design:
+        args += ["--chains_to_design", params.chains_to_design]
+    if params.parse_these_chains_only:
+        args += ["--parse_these_chains_only", params.parse_these_chains_only]
+
+    if params.bias_aa:
+        args += ["--bias_AA", params.bias_aa]
+    if params.omit_aa:
+        args += ["--omit_AA", params.omit_aa]
+    if params.bias_aa_per_residue:
+        path = tmpdir / "bias_aa_per_residue.json"
+        path.write_text(json.dumps(params.bias_aa_per_residue))
+        args += ["--bias_AA_per_residue", str(path)]
+    if params.omit_aa_per_residue:
+        path = tmpdir / "omit_aa_per_residue.json"
+        path.write_text(json.dumps(params.omit_aa_per_residue))
+        args += ["--omit_AA_per_residue", str(path)]
+
+    if params.symmetry_residues:
+        args += ["--symmetry_residues", params.symmetry_residues]
+    if params.symmetry_weights:
+        args += ["--symmetry_weights", params.symmetry_weights]
+    if params.homo_oligomer:
+        args += ["--homo_oligomer", "1"]
+
+    if params.save_stats:
+        args += ["--save_stats", "1"]
+    if params.parse_atoms_with_zero_occupancy:
+        args += ["--parse_atoms_with_zero_occupancy", "1"]
+    if params.zero_indexed:
+        args += ["--zero_indexed", "1"]
+
+    if params.pack_side_chains:
+        args += [
+            "--pack_side_chains",
+            "1",
+            "--checkpoint_path_sc",
+            checkpoint_path_sc,
+            "--number_of_packs_per_design",
+            str(params.number_of_packs_per_design),
+            "--sc_num_denoising_steps",
+            str(params.sc_num_denoising_steps),
+            "--sc_num_samples",
+            str(params.sc_num_samples),
+        ]
+        if params.repack_everything:
+            args += ["--repack_everything", "1"]
+
+    return args

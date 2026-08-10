@@ -21,6 +21,7 @@ from constants import (
     ESMFOLD2_LM_REPO,
     ESMFOLD2_WEIGHTS_REPO,
     LIGANDMPNN_CHECKPOINTS,
+    LIGANDMPNN_SC_CHECKPOINT,
     LOCAL_MOCKS_DIR,
     MINUTES_20,
     MINUTES_30,
@@ -175,16 +176,22 @@ def download_boltzgen_weights():
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
 def download_proteinmpnn_weights():
-    """Pre-stage ProteinMPNN checkpoints from the IPD file server."""
+    """Pre-stage ProteinMPNN checkpoints and the shared side-chain packer from the IPD server.
+
+    The packer checkpoint is checked per file, so it is added to a volume that was
+    already staged with the design checkpoints before packing support existed.
+    """
     import urllib.request
 
     volume.reload()
     cache_path = Path(VOLUME_PROTEINMPNN_CACHE)
-    if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"ProteinMPNN weights already on the volume, skipping {len(PROTEINMPNN_CHECKPOINTS)} checkpoints")
-        return
     cache_path.mkdir(parents=True, exist_ok=True)
-    for filename in PROTEINMPNN_CHECKPOINTS:
+    checkpoints = (*PROTEINMPNN_CHECKPOINTS, LIGANDMPNN_SC_CHECKPOINT)
+    missing = [filename for filename in checkpoints if not (cache_path / filename).exists()]
+    if not missing:
+        logger.info(f"ProteinMPNN weights already on the volume, skipping {len(checkpoints)} checkpoints")
+        return
+    for filename in missing:
         logger.info(f"Downloading ProteinMPNN checkpoint: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()

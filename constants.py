@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.8.0"
+API_VERSION = "0.9.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -97,6 +97,7 @@ PROTEINMPNN_CHECKPOINTS = (
     "proteinmpnn_v_48_020.pt",
     "proteinmpnn_v_48_030.pt",
 )
+LIGANDMPNN_SC_CHECKPOINT = "ligandmpnn_sc_v_32_002_16.pt"
 LIGANDMPNN_CHECKPOINTS = (
     "ligandmpnn_v_32_005_25.pt",
     "ligandmpnn_v_32_010_25.pt",
