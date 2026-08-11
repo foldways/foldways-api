@@ -24,9 +24,14 @@ account.
 
 ## About Foldways API
 
-Structure prediction and protein design tools each ship their own dependencies,
-weights, installation methods, CLI, I/O formats, and GPU assumptions. Running
-several of them has significant operational overhead.
+Structure prediction and protein design tools have become incredibly powerful
+over the past few years. An array of models now covers structure prediction,
+inverse folding, binder design, and stability prediction. Altogether, they have
+transformed protein engineering.
+
+However, structure prediction and protein design tools each ship their own
+dependencies, weights, installation methods, CLI, I/O formats, and GPU
+assumptions. Running several of them has significant operational overhead.
 
 Foldways API puts them behind one REST API with a shared job model. This makes
 it possible to submit a workload, poll for status, and download results the same
