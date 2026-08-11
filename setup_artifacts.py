@@ -29,6 +29,8 @@ from constants import (
     PROTEINMPNN_CHECKPOINTS,
     PROTEINMPNN_WEIGHTS_URL,
     SOLUBLEMPNN_CHECKPOINTS,
+    VESM_MODELS,
+    VESM_WEIGHTS_REPO,
     VOLUME_BOLTZ2_CACHE,
     VOLUME_BOLTZGEN_CACHE,
     VOLUME_CHAI_CACHE,
@@ -40,6 +42,7 @@ from constants import (
     VOLUME_PROTEINMPNN_CACHE,
     VOLUME_ROOT,
     VOLUME_SOLUBLEMPNN_CACHE,
+    VOLUME_VESM_CACHE,
 )
 from core import app, volume
 
@@ -264,6 +267,26 @@ def download_bindcraft_weights():
     logger.info(f"BindCraft AlphaFold2 params ready at {BINDCRAFT_AF2_PARAMS_DIR}")
 
 
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
+def download_vesm_weights():
+    """Pre-stage the base ESM2 models and the distilled VESM checkpoints."""
+    from huggingface_hub import hf_hub_download, snapshot_download  # pyright: ignore[reportMissingImports]
+
+    volume.reload()
+    cache_path = Path(VOLUME_VESM_CACHE)
+    if cache_path.exists() and any(cache_path.iterdir()):
+        logger.info(f"VESM weights already on the volume, skipping {len(VESM_MODELS)} models")
+        return
+    for base_repo in dict.fromkeys(VESM_MODELS.values()):
+        logger.info(f"Downloading VESM base model: {base_repo}")
+        snapshot_download(repo_id=base_repo, cache_dir=VOLUME_VESM_CACHE)
+    for model_name in VESM_MODELS:
+        logger.info(f"Downloading VESM checkpoint: {model_name}.pth")
+        hf_hub_download(repo_id=VESM_WEIGHTS_REPO, filename=f"{model_name}.pth", cache_dir=VOLUME_VESM_CACHE)
+    volume.commit()
+    logger.info(f"VESM weights ready at {VOLUME_VESM_CACHE}")
+
+
 def upload_mocks():
     """Copy the local mock fixtures onto the volume for mock job submissions."""
     logger.info("Uploading mock fixtures...")
@@ -285,5 +308,6 @@ def main():
     download_ligandmpnn_weights.remote()
     download_solublempnn_weights.remote()
     download_bindcraft_weights.remote()
+    download_vesm_weights.remote()
     upload_mocks()
     logger.info("Artifact setup complete.")

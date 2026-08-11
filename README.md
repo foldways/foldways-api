@@ -92,7 +92,7 @@ Supported and planned services.
 | Chai          | ✅ Supported | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)     | Structure prediction |
 | OpenDDE       | ⬜ Planned   | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)     | Structure prediction |
 | Protenix      | ⬜ Planned   | [bytedance/Protenix](https://github.com/bytedance/Protenix)             | Structure prediction |
-| VESM          | ⬜ Planned   | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                   | Property prediction  |
+| VESM          | ✅ Supported | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                   | Property prediction  |
 
 ## Requirements
 

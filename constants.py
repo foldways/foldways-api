@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.11.0"
+API_VERSION = "0.12.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -25,6 +25,7 @@ VOLUME_LIGANDMPNN_CACHE = f"{VOLUME_ROOT}/ligandmpnn_cache"
 VOLUME_SOLUBLEMPNN_CACHE = f"{VOLUME_ROOT}/solublempnn_cache"
 VOLUME_BINDCRAFT_CACHE = f"{VOLUME_ROOT}/bindcraft_cache"
 VOLUME_CHAI_CACHE = f"{VOLUME_ROOT}/chai_cache"
+VOLUME_VESM_CACHE = f"{VOLUME_ROOT}/vesm_cache"
 
 # Modal job config
 JOB_COMPLETE_MARKER = "job.log"
@@ -133,6 +134,21 @@ THERMOMPNN_COMMIT = "2b04fd370e399911b1fa5848112cc9013f084110"
 THERMOMPNN_DIR = "/opt/ThermoMPNN"
 THERMOMPNN_SPEC = f"ThermoMPNN@{THERMOMPNN_COMMIT}"
 THERMOMPNN_MODEL_PATH = f"{THERMOMPNN_DIR}/models/thermoMPNN_default.pt"
+
+# VESM
+VESM_COMMIT = "86d8bc78c589a8dd7cbb5feafea11580698981a2"
+VESM_SPEC = f"vesm@{VESM_COMMIT}"
+VESM_TORCH_SPEC = "torch==2.3.0"
+VESM_TRANSFORMERS_SPEC = "transformers==4.41.1"
+VESM_NUMPY_SPEC = "numpy<2"
+VESM_WEIGHTS_REPO = "ntranoslab/vesm"
+VESM_MODELS = {
+    "VESM_35M": "facebook/esm2_t12_35M_UR50D",
+    "VESM_150M": "facebook/esm2_t30_150M_UR50D",
+    "VESM_650M": "facebook/esm2_t33_650M_UR50D",
+    "VESM_3B": "facebook/esm2_t36_3B_UR50D",
+}
+VESM_MODEL_WINDOW = 1022
 
 # BindCraft
 BINDCRAFT_REPO = "https://github.com/martinpacesa/BindCraft.git"

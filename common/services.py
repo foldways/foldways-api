@@ -15,6 +15,7 @@ from services import (
     proteinmpnn,
     solublempnn,
     thermompnn,
+    vesm,
 )
 
 
@@ -86,5 +87,10 @@ SERVICES = {
         description="BindCraft de novo binder design against a target structure.",
         params=bindcraft.BindCraftParams,
         run=bindcraft.run,
+    ),
+    "vesm": ServiceEntry(
+        description="VESM variant effect prediction, log-likelihood-ratio scores for sequence mutations.",
+        params=vesm.VESMParams,
+        run=vesm.run,
     ),
 }
