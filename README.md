@@ -24,10 +24,10 @@ account.
 
 ## About Foldways API
 
-Structure prediction and protein design tools have become incredibly powerful
-over the past few years. An array of models now covers structure prediction,
-inverse folding, binder design, and stability prediction. Altogether, they have
-transformed protein engineering.
+Computational tools for protein engineering have become incredibly powerful over
+the past few years. An array of models now covers structure prediction, inverse
+folding, binder design, and stability prediction. Altogether, they have
+transformed the field.
 
 However, structure prediction and protein design tools each ship their own
 dependencies, weights, installation methods, CLI, I/O formats, and GPU
