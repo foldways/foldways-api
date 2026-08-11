@@ -76,23 +76,24 @@ done to avoid storing large MSA files in the Modal volume.
 
 Supported and planned services.
 
-| Service       | Status       | Codebase                                                                | Type                 |
-| ------------- | ------------ | ----------------------------------------------------------------------- | -------------------- |
-| Boltz-2       | ✅ Supported | [jwohlwend/boltz](https://github.com/jwohlwend/boltz)                   | Structure prediction |
-| BoltzGen      | ✅ Supported | [HannesStark/boltzgen](https://github.com/HannesStark/boltzgen)         | De novo design       |
-| ESMC          | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                             | Representation       |
-| ESMFold2      | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                             | Structure prediction |
-| ESM3          | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                             | De novo design       |
-| ProteinMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
-| LigandMPNN    | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
-| SolubleMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)           | Sequence design      |
-| ThermoMPNN    | ✅ Supported | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)     | Property prediction  |
-| ABodyBuilder3 | ⬜ Planned   | [Exscientia/abodybuilder3](https://github.com/Exscientia/abodybuilder3) | Structure prediction |
-| BindCraft     | ✅ Supported | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)     | De novo design       |
-| Chai          | ✅ Supported | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)     | Structure prediction |
-| OpenDDE       | ⬜ Planned   | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)     | Structure prediction |
-| Protenix      | ⬜ Planned   | [bytedance/Protenix](https://github.com/bytedance/Protenix)             | Structure prediction |
-| VESM          | ✅ Supported | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                   | Property prediction  |
+| Service       | Status       | Codebase                                                                  | Type                 |
+| ------------- | ------------ | ------------------------------------------------------------------------- | -------------------- |
+| Boltz-2       | ✅ Supported | [jwohlwend/boltz](https://github.com/jwohlwend/boltz)                     | Structure prediction |
+| BoltzGen      | ✅ Supported | [HannesStark/boltzgen](https://github.com/HannesStark/boltzgen)           | De novo design       |
+| ESMC          | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                               | Representation       |
+| ESMFold2      | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                               | Structure prediction |
+| ESM3          | ✅ Supported | [Biohub/esm](https://github.com/Biohub/esm)                               | De novo design       |
+| ProteinMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)             | Sequence design      |
+| LigandMPNN    | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)             | Sequence design      |
+| SolubleMPNN   | ✅ Supported | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)             | Sequence design      |
+| ThermoMPNN    | ✅ Supported | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)       | Property prediction  |
+| ABodyBuilder3 | ⬜ Planned   | [Exscientia/abodybuilder3](https://github.com/Exscientia/abodybuilder3)   | Structure prediction |
+| BindCraft     | ✅ Supported | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)       | De novo design       |
+| Chai          | ✅ Supported | [chaidiscovery/chai-lab](https://github.com/chaidiscovery/chai-lab)       | Structure prediction |
+| OpenDDE       | ⬜ Planned   | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)       | Structure prediction |
+| Protenix      | ⬜ Planned   | [bytedance/Protenix](https://github.com/bytedance/Protenix)               | Structure prediction |
+| VESM          | ✅ Supported | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                     | Property prediction  |
+| IntelliFold   | ⬜ Planned   | [IntelliGen-AI/IntelliFold](https://github.com/IntelliGen-AI/IntelliFold) | Structure prediction |
 
 ## Requirements
 
