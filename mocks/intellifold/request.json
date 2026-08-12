@@ -1,0 +1,24 @@
+{
+  "service": "intellifold",
+  "name": "intellifold-mock",
+  "params": {
+    "sequences": [
+      {
+        "protein": {
+          "id": "A",
+          "sequence": "SMSYDIQAWKKQCEELLNLIFQCEDSEPFRQPVDLLEYPDYRDIIDTPMDFATVRETLEAGNYESPMELCKDVRLIFSNSKAYTPSKRSRIYSMSLRLSAFFEEHISSVLSDYKSALRFHKRNTITKR"
+        }
+      },
+      {
+        "ligand": {
+          "id": "B",
+          "ccd": "2LY"
+        }
+      }
+    ],
+    "model": "v2-flash",
+    "use_msa_server": true,
+    "seeds": [42],
+    "num_diffusion_samples": 1
+  }
+}

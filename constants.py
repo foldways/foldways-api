@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.12.0"
+API_VERSION = "0.13.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -26,6 +26,7 @@ VOLUME_SOLUBLEMPNN_CACHE = f"{VOLUME_ROOT}/solublempnn_cache"
 VOLUME_BINDCRAFT_CACHE = f"{VOLUME_ROOT}/bindcraft_cache"
 VOLUME_CHAI_CACHE = f"{VOLUME_ROOT}/chai_cache"
 VOLUME_VESM_CACHE = f"{VOLUME_ROOT}/vesm_cache"
+VOLUME_INTELLIFOLD_CACHE = f"{VOLUME_ROOT}/intellifold_cache"
 
 # Modal job config
 JOB_COMPLETE_MARKER = "job.log"
@@ -149,6 +150,21 @@ VESM_MODELS = {
     "VESM_3B": "facebook/esm2_t36_3B_UR50D",
 }
 VESM_MODEL_WINDOW = 1022
+
+INTELLIFOLD_SPEC = "intellifold==2.0.2"
+INTELLIFOLD_WEIGHTS_REPO = "intelligenAI/intellifold"
+INTELLIFOLD_CCD_FILE = "ccd_v2.pkl"
+INTELLIFOLD_CHECKPOINTS = (
+    "intellifold_v2_flash.pt",
+    "intellifold_v2.pt",
+    "intellifold_v0.1.0.pt",
+)
+INTELLIFOLD_DATA_FILES = (
+    "unique_protein_sequences.fasta",
+    "unique_nucleic_acid_sequences.fasta",
+    "protein_id_groups.json",
+    "nucleic_acid_id_groups.json",
+)
 
 # BindCraft
 BINDCRAFT_REPO = "https://github.com/martinpacesa/BindCraft.git"

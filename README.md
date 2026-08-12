@@ -93,7 +93,7 @@ Supported and planned services.
 | OpenDDE       | ⬜ Planned   | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)       | Structure prediction |
 | Protenix      | ⬜ Planned   | [bytedance/Protenix](https://github.com/bytedance/Protenix)               | Structure prediction |
 | VESM          | ✅ Supported | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                     | Property prediction  |
-| IntelliFold   | ⬜ Planned   | [IntelliGen-AI/IntelliFold](https://github.com/IntelliGen-AI/IntelliFold) | Structure prediction |
+| IntelliFold   | ✅ Supported | [IntelliGen-AI/IntelliFold](https://github.com/IntelliGen-AI/IntelliFold) | Structure prediction |
 
 ## Requirements
 
