@@ -11,6 +11,7 @@ from services import (
     esm3,
     esmc,
     esmfold2,
+    intellifold,
     ligandmpnn,
     proteinmpnn,
     solublempnn,
@@ -92,5 +93,10 @@ SERVICES = {
         description="VESM variant effect prediction, log-likelihood-ratio scores for sequence mutations.",
         params=vesm.VESMParams,
         run=vesm.run,
+    ),
+    "intellifold": ServiceEntry(
+        description="IntelliFold all-atom structure prediction for proteins, ligands, and nucleic acids.",
+        params=intellifold.IntelliFoldParams,
+        run=intellifold.run,
     ),
 }

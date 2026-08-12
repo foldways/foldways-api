@@ -20,6 +20,10 @@ from constants import (
     ESMC_600M_WEIGHTS_REPO,
     ESMFOLD2_LM_REPO,
     ESMFOLD2_WEIGHTS_REPO,
+    INTELLIFOLD_CCD_FILE,
+    INTELLIFOLD_CHECKPOINTS,
+    INTELLIFOLD_DATA_FILES,
+    INTELLIFOLD_WEIGHTS_REPO,
     LIGANDMPNN_CHECKPOINTS,
     LIGANDMPNN_SC_CHECKPOINT,
     LOCAL_MOCKS_DIR,
@@ -37,6 +41,7 @@ from constants import (
     VOLUME_ESM3_CACHE,
     VOLUME_ESMC_CACHE,
     VOLUME_ESMFOLD2_CACHE,
+    VOLUME_INTELLIFOLD_CACHE,
     VOLUME_LIGANDMPNN_CACHE,
     VOLUME_MOCKS_DIR,
     VOLUME_PROTEINMPNN_CACHE,
@@ -287,6 +292,26 @@ def download_vesm_weights():
     logger.info(f"VESM weights ready at {VOLUME_VESM_CACHE}")
 
 
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
+def download_intellifold_weights():
+    """Pre-stage IntelliFold checkpoints and the CCD dictionary from Hugging Face."""
+    from huggingface_hub import hf_hub_download  # pyright: ignore[reportMissingImports]
+
+    volume.reload()
+    cache_path = Path(VOLUME_INTELLIFOLD_CACHE)
+    cache_path.mkdir(parents=True, exist_ok=True)
+    files = (INTELLIFOLD_CCD_FILE, *INTELLIFOLD_CHECKPOINTS, *INTELLIFOLD_DATA_FILES)
+    missing = [filename for filename in files if not (cache_path / filename).exists()]
+    if not missing:
+        logger.info(f"IntelliFold weights already on the volume, skipping {len(files)} files")
+        return
+    for filename in missing:
+        logger.info(f"Downloading IntelliFold file: {filename}")
+        hf_hub_download(repo_id=INTELLIFOLD_WEIGHTS_REPO, filename=filename, local_dir=VOLUME_INTELLIFOLD_CACHE)
+    volume.commit()
+    logger.info(f"IntelliFold weights ready at {VOLUME_INTELLIFOLD_CACHE}")
+
+
 def upload_mocks():
     """Copy the local mock fixtures onto the volume for mock job submissions."""
     logger.info("Uploading mock fixtures...")
@@ -309,5 +334,6 @@ def main():
     download_solublempnn_weights.remote()
     download_bindcraft_weights.remote()
     download_vesm_weights.remote()
+    download_intellifold_weights.remote()
     upload_mocks()
     logger.info("Artifact setup complete.")
