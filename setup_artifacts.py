@@ -80,7 +80,7 @@ def download_boltz2_weights():
     volume.reload()
     cache_path = Path(VOLUME_BOLTZ2_CACHE)
     if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"Boltz-2 weights already on the volume, skipping {BOLTZ2_WEIGHTS_REPO}")
+        logger.info("Boltz-2 weights already on the volume. Skipping download.")
         return
     logger.info(f"Downloading Boltz-2 weights: {BOLTZ2_WEIGHTS_REPO}@{BOLTZ2_WEIGHTS_REVISION}")
     snapshot_download(
@@ -100,7 +100,7 @@ def download_esmc_weights():
     volume.reload()
     cache_path = Path(VOLUME_ESMC_CACHE)
     if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"ESMC weights already on the volume, skipping {ESMC_600M_WEIGHTS_REPO}")
+        logger.info("ESMC weights already on the volume. Skipping download.")
         return
     logger.info(f"Downloading ESMC weights: {ESMC_600M_WEIGHTS_REPO}")
     snapshot_download(repo_id=ESMC_600M_WEIGHTS_REPO, cache_dir=VOLUME_ESMC_CACHE)
@@ -116,7 +116,7 @@ def download_esmfold2_weights():
     volume.reload()
     cache_path = Path(VOLUME_ESMFOLD2_CACHE)
     if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"ESMFold2 weights already on the volume, skipping {ESMFOLD2_WEIGHTS_REPO}")
+        logger.info("ESMFold2 weights already on the volume. Skipping download.")
         return
     for repo in (ESMFOLD2_WEIGHTS_REPO, ESMFOLD2_LM_REPO):
         logger.info(f"Downloading ESMFold2 weights: {repo}")
@@ -137,7 +137,7 @@ def download_esm3_weights():
     volume.reload()
     cache_path = Path(VOLUME_ESM3_CACHE)
     if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"ESM3 weights already on the volume, skipping {ESM3_WEIGHTS_REPO}")
+        logger.info("ESM3 weights already on the volume. Skipping download.")
         return
     logger.info(f"Downloading ESM3 weights: {ESM3_WEIGHTS_REPO}")
     snapshot_download(repo_id=ESM3_WEIGHTS_REPO, cache_dir=VOLUME_ESM3_CACHE)
@@ -167,10 +167,10 @@ def download_chai_weights():
 
     missing = [(url, cache_path / rel) for url, rel in downloads if not (cache_path / rel).exists()]
     if not missing:
-        logger.info("Chai-1 weights already on the volume, skipping")
+        logger.info("Chai-1 weights already on the volume. Skipping download.")
         return
     for url, dest in missing:
-        logger.info(f"Downloading Chai-1 weight: {url}")
+        logger.info(f"Downloading Chai-1 weights: {url}")
         dest.parent.mkdir(parents=True, exist_ok=True)
         request = urllib.request.Request(url, headers={"User-Agent": "python-requests/2.32"})
         tmp = dest.with_suffix(dest.suffix + ".tmp")
@@ -189,7 +189,7 @@ def download_boltzgen_weights():
     volume.reload()
     cache_path = Path(VOLUME_BOLTZGEN_CACHE)
     if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"BoltzGen weights already on the volume, skipping {BOLTZGEN_MODEL_REPO}")
+        logger.info("BoltzGen weights already on the volume. Skipping download.")
         return
     snapshot_download(repo_id=BOLTZGEN_MODEL_REPO, cache_dir=VOLUME_BOLTZGEN_CACHE)
     snapshot_download(repo_id=BOLTZGEN_DATA_REPO, repo_type="dataset", cache_dir=VOLUME_BOLTZGEN_CACHE)
@@ -212,10 +212,10 @@ def download_proteinmpnn_weights():
     checkpoints = (*PROTEINMPNN_CHECKPOINTS, LIGANDMPNN_SC_CHECKPOINT)
     missing = [filename for filename in checkpoints if not (cache_path / filename).exists()]
     if not missing:
-        logger.info(f"ProteinMPNN weights already on the volume, skipping {len(checkpoints)} checkpoints")
+        logger.info("ProteinMPNN weights already on the volume. Skipping download.")
         return
     for filename in missing:
-        logger.info(f"Downloading ProteinMPNN checkpoint: {filename}")
+        logger.info(f"Downloading ProteinMPNN weights: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
     logger.info(f"ProteinMPNN weights ready at {VOLUME_PROTEINMPNN_CACHE}")
@@ -232,10 +232,10 @@ def download_ligandmpnn_weights():
     checkpoints = (*LIGANDMPNN_CHECKPOINTS, LIGANDMPNN_SC_CHECKPOINT)
     missing = [filename for filename in checkpoints if not (cache_path / filename).exists()]
     if not missing:
-        logger.info(f"LigandMPNN weights already on the volume, skipping {len(checkpoints)} checkpoints")
+        logger.info("LigandMPNN weights already on the volume. Skipping download.")
         return
     for filename in missing:
-        logger.info(f"Downloading LigandMPNN checkpoint: {filename}")
+        logger.info(f"Downloading LigandMPNN weights: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
     logger.info(f"LigandMPNN weights ready at {VOLUME_LIGANDMPNN_CACHE}")
@@ -252,10 +252,10 @@ def download_solublempnn_weights():
     checkpoints = (*SOLUBLEMPNN_CHECKPOINTS, LIGANDMPNN_SC_CHECKPOINT)
     missing = [filename for filename in checkpoints if not (cache_path / filename).exists()]
     if not missing:
-        logger.info(f"SolubleMPNN weights already on the volume, skipping {len(checkpoints)} checkpoints")
+        logger.info("SolubleMPNN weights already on the volume. Skipping download.")
         return
     for filename in missing:
-        logger.info(f"Downloading SolubleMPNN checkpoint: {filename}")
+        logger.info(f"Downloading SolubleMPNN weights: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
     logger.info(f"SolubleMPNN weights ready at {VOLUME_SOLUBLEMPNN_CACHE}")
@@ -271,20 +271,20 @@ def download_bindcraft_weights():
     volume.reload()
     params_path = Path(BINDCRAFT_AF2_PARAMS_DIR)
     if (params_path / BINDCRAFT_AF2_PARAMS_MARKER).exists():
-        logger.info("BindCraft AlphaFold2 params already on the volume, skipping")
+        logger.info("BindCraft weights already on the volume. Skipping download.")
         return
     params_path.mkdir(parents=True, exist_ok=True)
-    logger.info(f"Downloading BindCraft AlphaFold2 params: {BINDCRAFT_AF2_WEIGHTS_URL}")
+    logger.info(f"Downloading BindCraft weights: {BINDCRAFT_AF2_WEIGHTS_URL}")
     with tempfile.TemporaryDirectory() as tmpdir:
         archive_path = Path(tmpdir) / "alphafold_params.tar"
         urllib.request.urlretrieve(BINDCRAFT_AF2_WEIGHTS_URL, archive_path)
-        logger.info(f"Extracting BindCraft AlphaFold2 params to {BINDCRAFT_AF2_PARAMS_DIR}")
+        logger.info(f"Extracting BindCraft weights to {BINDCRAFT_AF2_PARAMS_DIR}")
         with tarfile.open(archive_path) as tar:
             tar.extractall(params_path, filter="data")
     if not (params_path / BINDCRAFT_AF2_PARAMS_MARKER).exists():
         raise RuntimeError(f"AlphaFold2 params missing {BINDCRAFT_AF2_PARAMS_MARKER} after extraction")
     volume.commit()
-    logger.info(f"BindCraft AlphaFold2 params ready at {BINDCRAFT_AF2_PARAMS_DIR}")
+    logger.info(f"BindCraft weights ready at {BINDCRAFT_AF2_PARAMS_DIR}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -295,13 +295,13 @@ def download_vesm_weights():
     volume.reload()
     cache_path = Path(VOLUME_VESM_CACHE)
     if cache_path.exists() and any(cache_path.iterdir()):
-        logger.info(f"VESM weights already on the volume, skipping {len(VESM_MODELS)} models")
+        logger.info("VESM weights already on the volume. Skipping download.")
         return
     for base_repo in dict.fromkeys(VESM_MODELS.values()):
-        logger.info(f"Downloading VESM base model: {base_repo}")
+        logger.info(f"Downloading VESM weights: {base_repo}")
         snapshot_download(repo_id=base_repo, cache_dir=VOLUME_VESM_CACHE)
     for model_name in VESM_MODELS:
-        logger.info(f"Downloading VESM checkpoint: {model_name}.pth")
+        logger.info(f"Downloading VESM weights: {model_name}.pth")
         hf_hub_download(repo_id=VESM_WEIGHTS_REPO, filename=f"{model_name}.pth", cache_dir=VOLUME_VESM_CACHE)
     volume.commit()
     logger.info(f"VESM weights ready at {VOLUME_VESM_CACHE}")
@@ -318,10 +318,10 @@ def download_intellifold_weights():
     files = (INTELLIFOLD_CCD_FILE, *INTELLIFOLD_CHECKPOINTS, *INTELLIFOLD_DATA_FILES)
     missing = [filename for filename in files if not (cache_path / filename).exists()]
     if not missing:
-        logger.info(f"IntelliFold weights already on the volume, skipping {len(files)} files")
+        logger.info("IntelliFold weights already on the volume. Skipping download.")
         return
     for filename in missing:
-        logger.info(f"Downloading IntelliFold file: {filename}")
+        logger.info(f"Downloading IntelliFold weights: {filename}")
         hf_hub_download(repo_id=INTELLIFOLD_WEIGHTS_REPO, filename=filename, local_dir=VOLUME_INTELLIFOLD_CACHE)
     volume.commit()
     logger.info(f"IntelliFold weights ready at {VOLUME_INTELLIFOLD_CACHE}")
@@ -341,9 +341,9 @@ def download_immunebuilder_weights():
 
     volume.reload()
     Path(VOLUME_IMMUNEBUILDER_CACHE).mkdir(parents=True, exist_ok=True)
-    logger.info("Staging ImmuneBuilder weights from Zenodo, which is slow, so a full download can take a while")
+    logger.info("Downloading ImmuneBuilder weights from Zenodo. Note that Zenudo transfer rates can be slow.")
     for predictor in (ABodyBuilder2, NanoBodyBuilder2, TCRBuilder2):
-        logger.info(f"Staging ImmuneBuilder weights: {predictor.__name__}")
+        logger.info(f"Downloading ImmuneBuilder weights: {predictor.__name__}")
         predictor(weights_dir=VOLUME_IMMUNEBUILDER_CACHE)
     volume.commit()
     logger.info(f"ImmuneBuilder weights ready at {VOLUME_IMMUNEBUILDER_CACHE}")
