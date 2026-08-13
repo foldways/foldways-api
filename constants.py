@@ -1,7 +1,7 @@
 from enum import StrEnum
 
 APP_NAME = "foldways"
-API_VERSION = "0.13.0"
+API_VERSION = "0.14.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
@@ -27,6 +27,7 @@ VOLUME_BINDCRAFT_CACHE = f"{VOLUME_ROOT}/bindcraft_cache"
 VOLUME_CHAI_CACHE = f"{VOLUME_ROOT}/chai_cache"
 VOLUME_VESM_CACHE = f"{VOLUME_ROOT}/vesm_cache"
 VOLUME_INTELLIFOLD_CACHE = f"{VOLUME_ROOT}/intellifold_cache"
+VOLUME_IMMUNEBUILDER_CACHE = f"{VOLUME_ROOT}/immunebuilder_cache"
 
 # Modal job config
 JOB_COMPLETE_MARKER = "job.log"
@@ -165,6 +166,9 @@ INTELLIFOLD_DATA_FILES = (
     "protein_id_groups.json",
     "nucleic_acid_id_groups.json",
 )
+
+# ImmuneBuilder
+IMMUNEBUILDER_SPEC = "ImmuneBuilder==1.2"
 
 # BindCraft
 BINDCRAFT_REPO = "https://github.com/martinpacesa/BindCraft.git"

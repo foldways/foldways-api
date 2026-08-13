@@ -20,6 +20,8 @@ from constants import (
     ESMC_600M_WEIGHTS_REPO,
     ESMFOLD2_LM_REPO,
     ESMFOLD2_WEIGHTS_REPO,
+    HOURS_6,
+    IMMUNEBUILDER_SPEC,
     INTELLIFOLD_CCD_FILE,
     INTELLIFOLD_CHECKPOINTS,
     INTELLIFOLD_DATA_FILES,
@@ -32,6 +34,9 @@ from constants import (
     MINUTES_60,
     PROTEINMPNN_CHECKPOINTS,
     PROTEINMPNN_WEIGHTS_URL,
+    PYDANTIC_SPEC,
+    PYTHON_3_11,
+    SERVICE_SOURCES,
     SOLUBLEMPNN_CHECKPOINTS,
     VESM_MODELS,
     VESM_WEIGHTS_REPO,
@@ -41,6 +46,7 @@ from constants import (
     VOLUME_ESM3_CACHE,
     VOLUME_ESMC_CACHE,
     VOLUME_ESMFOLD2_CACHE,
+    VOLUME_IMMUNEBUILDER_CACHE,
     VOLUME_INTELLIFOLD_CACHE,
     VOLUME_LIGANDMPNN_CACHE,
     VOLUME_MOCKS_DIR,
@@ -55,6 +61,15 @@ logger = logging.getLogger(__name__)
 
 
 download_image = modal.Image.debian_slim().pip_install("huggingface_hub").add_local_python_source("constants", "core")
+
+# Matches the image in services/immunebuilder.py, so Modal builds it once and both reuse it.
+# Staging instantiates the predictors, so this image carries ImmuneBuilder and its deps.
+immunebuilder_image = (
+    modal.Image.micromamba(python_version=PYTHON_3_11)
+    .micromamba_install("openmm", "pdbfixer", "anarci", channels=["conda-forge", "bioconda"])
+    .pip_install(IMMUNEBUILDER_SPEC, "torch", PYDANTIC_SPEC)
+    .add_local_python_source(*SERVICE_SOURCES)
+)
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
@@ -312,6 +327,28 @@ def download_intellifold_weights():
     logger.info(f"IntelliFold weights ready at {VOLUME_INTELLIFOLD_CACHE}")
 
 
+@app.function(image=immunebuilder_image, volumes={VOLUME_ROOT: volume}, timeout=HOURS_6)
+def download_immunebuilder_weights():
+    """Pre-stage ImmuneBuilder weights by letting each predictor download into the volume.
+
+    Constructing a predictor downloads only the weight files it is missing, so this is
+    idempotent and resumes a partial stage rather than restarting or skipping it. The
+    weights are hosted on Zenodo, which is bandwidth-throttled, so a full stage can take
+    several minutes per model. It is a one-time cost, since the weights then live on the
+    volume.
+    """
+    from ImmuneBuilder import ABodyBuilder2, NanoBodyBuilder2, TCRBuilder2  # pyright: ignore[reportMissingImports]
+
+    volume.reload()
+    Path(VOLUME_IMMUNEBUILDER_CACHE).mkdir(parents=True, exist_ok=True)
+    logger.info("Staging ImmuneBuilder weights from Zenodo, which is slow, so a full download can take a while")
+    for predictor in (ABodyBuilder2, NanoBodyBuilder2, TCRBuilder2):
+        logger.info(f"Staging ImmuneBuilder weights: {predictor.__name__}")
+        predictor(weights_dir=VOLUME_IMMUNEBUILDER_CACHE)
+    volume.commit()
+    logger.info(f"ImmuneBuilder weights ready at {VOLUME_IMMUNEBUILDER_CACHE}")
+
+
 def upload_mocks():
     """Copy the local mock fixtures onto the volume for mock job submissions."""
     logger.info("Uploading mock fixtures...")
@@ -335,5 +372,6 @@ def main():
     download_bindcraft_weights.remote()
     download_vesm_weights.remote()
     download_intellifold_weights.remote()
+    download_immunebuilder_weights.remote()
     upload_mocks()
     logger.info("Artifact setup complete.")

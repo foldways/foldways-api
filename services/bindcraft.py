@@ -34,12 +34,9 @@ logger = logging.getLogger(__name__)
 
 bindcraft_image = (
     modal.Image.debian_slim(python_version=PYTHON_3_11)
-    # DAlphaBall.gcc links libgfortran.so.5 and libgmp.so.10, which the slim base lacks.
     .apt_install("git", "ffmpeg", "libgfortran5", "libgmp10")
     .pip_install(
-        # BindCraft predates pandas 3, which its own Python 3.10 floor kept it away from.
         "pandas<3.0.0",
-        # ColabDesign's animation plots call matplotlib.cm.get_cmap, which 3.9 removed.
         "matplotlib<3.9.0",
         "numpy<2.0.0",
         "biopython",

@@ -27,7 +27,6 @@ logger = logging.getLogger(__name__)
 
 esmc_image = (
     modal.Image.debian_slim(python_version=PYTHON_3_12)
-    # esm and its transformers fork install from git, which uv fetches with the git CLI.
     .apt_install("git")
     .uv_pip_install(ESMC_SPEC, PYDANTIC_SPEC)
     .env({"HF_HUB_CACHE": VOLUME_ESMC_CACHE})

@@ -25,11 +25,6 @@ from core import app, volume
 logger = logging.getLogger(__name__)
 
 
-# ThermoMPNN is a research repo with its checkpoints committed in git, so the clone carries
-# the weights and no volume staging is needed. Its local.yaml hardcodes the author's NAS
-# paths, and the inference path reads platform.thermompnn_dir to locate the vanilla
-# ProteinMPNN backbone, so it is rewritten to the clone. Python is 3.12 rather than the 3.10
-# the repo pins, because the shared modules use StrEnum and datetime.UTC.
 thermompnn_image = (
     modal.Image.debian_slim(python_version=PYTHON_3_12)
     .apt_install("git")
