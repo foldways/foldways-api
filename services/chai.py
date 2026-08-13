@@ -21,8 +21,6 @@ from core import app, volume
 logger = logging.getLogger(__name__)
 
 
-# CHAI_DOWNLOADS_DIR points Chai at the weights staged on the volume, so it downloads nothing
-# at inference as long as MSAs and templates are not requested from a server.
 chai_image = (
     modal.Image.debian_slim(python_version=PYTHON_3_12)
     .apt_install("git")

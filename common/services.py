@@ -11,6 +11,7 @@ from services import (
     esm3,
     esmc,
     esmfold2,
+    immunebuilder,
     intellifold,
     ligandmpnn,
     proteinmpnn,
@@ -98,5 +99,10 @@ SERVICES = {
         description="IntelliFold all-atom structure prediction for proteins, ligands, and nucleic acids.",
         params=intellifold.IntelliFoldParams,
         run=intellifold.run,
+    ),
+    "immunebuilder": ServiceEntry(
+        description="ImmuneBuilder structure prediction for antibodies, nanobodies, and T-cell receptors.",
+        params=immunebuilder.ImmuneBuilderParams,
+        run=immunebuilder.run,
     ),
 }
