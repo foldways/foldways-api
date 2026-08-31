@@ -14,7 +14,8 @@ VOLUME_NAME = "foldways-data"
 VOLUME_ROOT = "/data"
 VOLUME_OUTPUTS_DIR = f"{VOLUME_ROOT}/outputs"
 VOLUME_JOBS_DIR = f"{VOLUME_ROOT}/jobs"
-VOLUME_MOCKS_DIR = f"{VOLUME_ROOT}/mocks"
+VOLUME_MOCKS_SUBDIR = "mocks"
+VOLUME_MOCKS_DIR = f"{VOLUME_ROOT}/{VOLUME_MOCKS_SUBDIR}"
 VOLUME_BOLTZ2_CACHE = f"{VOLUME_ROOT}/boltz2_cache"
 VOLUME_ESMC_CACHE = f"{VOLUME_ROOT}/esmc_cache"
 VOLUME_ESMFOLD2_CACHE = f"{VOLUME_ROOT}/esmfold2_cache"
@@ -28,6 +29,7 @@ VOLUME_CHAI_CACHE = f"{VOLUME_ROOT}/chai_cache"
 VOLUME_VESM_CACHE = f"{VOLUME_ROOT}/vesm_cache"
 VOLUME_INTELLIFOLD_CACHE = f"{VOLUME_ROOT}/intellifold_cache"
 VOLUME_IMMUNEBUILDER_CACHE = f"{VOLUME_ROOT}/immunebuilder_cache"
+VOLUME_PROTENIX_CACHE = f"{VOLUME_ROOT}/protenix_cache"
 
 # Modal job config
 JOB_COMPLETE_MARKER = "job.log"
@@ -169,6 +171,25 @@ INTELLIFOLD_DATA_FILES = (
 
 # ImmuneBuilder
 IMMUNEBUILDER_SPEC = "ImmuneBuilder==1.2"
+
+# Protenix
+PROTENIX_SPEC = "protenix==2.0.0"
+PROTENIX_ROOT_ENV = "PROTENIX_ROOT_DIR"
+PROTENIX_DOWNLOAD_URL = "https://protenix.tos-cn-beijing.volces.com"
+PROTENIX_CUDA_IMAGE = "nvidia/cuda:12.6.3-devel-ubuntu22.04"
+PROTENIX_CUDA_ARCH = "8.0;9.0"
+PROTENIX_MSA_SERVER_ENV = "MMSEQS_SERVICE_HOST_URL"
+PROTENIX_COLABFOLD_MSA_URL = "https://api.colabfold.com"
+PROTENIX_MODELS = (
+    "protenix_base_default_v1.0.0",
+    "protenix_mini_default_v0.5.0",
+)
+PROTENIX_CACHE_FILES = (
+    "components.cif",
+    "components.cif.rdkit_mol.pkl",
+    "clusters-by-entity-40.txt",
+    "obsolete_release_date.csv",
+)
 
 # BindCraft
 BINDCRAFT_REPO = "https://github.com/martinpacesa/BindCraft.git"

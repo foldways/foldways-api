@@ -1,0 +1,19 @@
+{
+  "service": "protenix",
+  "name": "protenix-mock",
+  "params": {
+    "sequences": [
+      {
+        "protein": {
+          "id": "A",
+          "sequence": "AAAAAAAAAA"
+        }
+      }
+    ],
+    "model": "protenix_base_default_v1.0.0",
+    "use_msa": true,
+    "msa_server_mode": "colabfold",
+    "seeds": [101],
+    "num_samples": 1
+  }
+}
