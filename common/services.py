@@ -15,6 +15,7 @@ from services import (
     intellifold,
     ligandmpnn,
     proteinmpnn,
+    protenix,
     solublempnn,
     thermompnn,
     vesm,
@@ -104,5 +105,10 @@ SERVICES = {
         description="ImmuneBuilder structure prediction for antibodies, nanobodies, and T-cell receptors.",
         params=immunebuilder.ImmuneBuilderParams,
         run=immunebuilder.run,
+    ),
+    "protenix": ServiceEntry(
+        description="Protenix all-atom structure prediction for proteins, ligands, nucleic acids, and ions.",
+        params=protenix.ProtenixParams,
+        run=protenix.run,
     ),
 }

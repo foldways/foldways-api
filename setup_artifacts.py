@@ -34,6 +34,9 @@ from constants import (
     MINUTES_60,
     PROTEINMPNN_CHECKPOINTS,
     PROTEINMPNN_WEIGHTS_URL,
+    PROTENIX_CACHE_FILES,
+    PROTENIX_DOWNLOAD_URL,
+    PROTENIX_MODELS,
     PYDANTIC_SPEC,
     PYTHON_3_11,
     SERVICE_SOURCES,
@@ -50,7 +53,9 @@ from constants import (
     VOLUME_INTELLIFOLD_CACHE,
     VOLUME_LIGANDMPNN_CACHE,
     VOLUME_MOCKS_DIR,
+    VOLUME_MOCKS_SUBDIR,
     VOLUME_PROTEINMPNN_CACHE,
+    VOLUME_PROTENIX_CACHE,
     VOLUME_ROOT,
     VOLUME_SOLUBLEMPNN_CACHE,
     VOLUME_VESM_CACHE,
@@ -327,6 +332,38 @@ def download_intellifold_weights():
     logger.info(f"IntelliFold weights ready at {VOLUME_INTELLIFOLD_CACHE}")
 
 
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
+def download_protenix_weights():
+    """Pre-stage Protenix checkpoints and the CCD and cluster caches from the ByteDance TOS bucket.
+
+    Protenix reads everything under PROTENIX_ROOT_DIR, checkpoints from checkpoint/ and the
+    shared caches from common/, and downloads whatever is missing on the first run. Staging
+    them to the volume at those exact paths lets the service run without any download.
+    """
+    import urllib.request
+
+    volume.reload()
+    cache_path = Path(VOLUME_PROTENIX_CACHE)
+    checkpoint_dir = cache_path / "checkpoint"
+    common_dir = cache_path / "common"
+    checkpoint_dir.mkdir(parents=True, exist_ok=True)
+    common_dir.mkdir(parents=True, exist_ok=True)
+
+    downloads = [(f"{PROTENIX_DOWNLOAD_URL}/common/{name}", common_dir / name) for name in PROTENIX_CACHE_FILES]
+    downloads += [
+        (f"{PROTENIX_DOWNLOAD_URL}/checkpoint/{model}.pt", checkpoint_dir / f"{model}.pt") for model in PROTENIX_MODELS
+    ]
+    missing = [(url, dest) for url, dest in downloads if not dest.exists()]
+    if not missing:
+        logger.info("Protenix weights already on the volume. Skipping download.")
+        return
+    for url, dest in missing:
+        logger.info(f"Downloading Protenix weights: {url}")
+        urllib.request.urlretrieve(url, dest)
+    volume.commit()
+    logger.info(f"Protenix weights ready at {VOLUME_PROTENIX_CACHE}")
+
+
 @app.function(image=immunebuilder_image, volumes={VOLUME_ROOT: volume}, timeout=HOURS_6)
 def download_immunebuilder_weights():
     """Pre-stage ImmuneBuilder weights by letting each predictor download into the volume.
@@ -353,7 +390,7 @@ def upload_mocks():
     """Copy the local mock fixtures onto the volume for mock job submissions."""
     logger.info("Uploading mock fixtures...")
     with volume.batch_upload(force=True) as batch:
-        batch.put_directory(LOCAL_MOCKS_DIR, VOLUME_MOCKS_DIR)
+        batch.put_directory(LOCAL_MOCKS_DIR, VOLUME_MOCKS_SUBDIR)
     logger.info(f"Mock fixtures ready at {VOLUME_MOCKS_DIR}")
 
 
@@ -373,5 +410,6 @@ def main():
     download_vesm_weights.remote()
     download_intellifold_weights.remote()
     download_immunebuilder_weights.remote()
+    download_protenix_weights.remote()
     upload_mocks()
     logger.info("Artifact setup complete.")
