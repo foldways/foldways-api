@@ -171,6 +171,23 @@ INTELLIFOLD_DATA_FILES = (
 
 # ImmuneBuilder
 IMMUNEBUILDER_SPEC = "ImmuneBuilder==1.2"
+IMMUNEBUILDER_ZENODO_BASE = "https://zenodo.org/records"
+IMMUNEBUILDER_AB_NB_RECORD = "7258553"  # antibody and nanobody weights
+IMMUNEBUILDER_TCR_RECORD = "10892159"  # default TCRBuilder2+ weights
+IMMUNEBUILDER_WEIGHTS = (
+    ("antibody_model_1", IMMUNEBUILDER_AB_NB_RECORD),
+    ("antibody_model_2", IMMUNEBUILDER_AB_NB_RECORD),
+    ("antibody_model_3", IMMUNEBUILDER_AB_NB_RECORD),
+    ("antibody_model_4", IMMUNEBUILDER_AB_NB_RECORD),
+    ("nanobody_model_1", IMMUNEBUILDER_AB_NB_RECORD),
+    ("nanobody_model_2", IMMUNEBUILDER_AB_NB_RECORD),
+    ("nanobody_model_3", IMMUNEBUILDER_AB_NB_RECORD),
+    ("nanobody_model_4", IMMUNEBUILDER_AB_NB_RECORD),
+    ("tcr_model_1", IMMUNEBUILDER_TCR_RECORD),
+    ("tcr_model_2", IMMUNEBUILDER_TCR_RECORD),
+    ("tcr_model_3", IMMUNEBUILDER_TCR_RECORD),
+    ("tcr_model_4", IMMUNEBUILDER_TCR_RECORD),
+)
 
 # Protenix
 PROTENIX_SPEC = "protenix==2.0.0"

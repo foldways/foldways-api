@@ -20,8 +20,8 @@ from constants import (
     ESMC_600M_WEIGHTS_REPO,
     ESMFOLD2_LM_REPO,
     ESMFOLD2_WEIGHTS_REPO,
-    HOURS_6,
-    IMMUNEBUILDER_SPEC,
+    IMMUNEBUILDER_WEIGHTS,
+    IMMUNEBUILDER_ZENODO_BASE,
     INTELLIFOLD_CCD_FILE,
     INTELLIFOLD_CHECKPOINTS,
     INTELLIFOLD_DATA_FILES,
@@ -37,9 +37,6 @@ from constants import (
     PROTENIX_CACHE_FILES,
     PROTENIX_DOWNLOAD_URL,
     PROTENIX_MODELS,
-    PYDANTIC_SPEC,
-    PYTHON_3_11,
-    SERVICE_SOURCES,
     SOLUBLEMPNN_CHECKPOINTS,
     VESM_MODELS,
     VESM_WEIGHTS_REPO,
@@ -66,15 +63,6 @@ logger = logging.getLogger(__name__)
 
 
 download_image = modal.Image.debian_slim().pip_install("huggingface_hub").add_local_python_source("constants", "core")
-
-# Matches the image in services/immunebuilder.py, so Modal builds it once and both reuse it.
-# Staging instantiates the predictors, so this image carries ImmuneBuilder and its deps.
-immunebuilder_image = (
-    modal.Image.micromamba(python_version=PYTHON_3_11)
-    .micromamba_install("openmm", "pdbfixer", "anarci", channels=["conda-forge", "bioconda"])
-    .pip_install(IMMUNEBUILDER_SPEC, "torch", PYDANTIC_SPEC)
-    .add_local_python_source(*SERVICE_SOURCES)
-)
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
@@ -364,24 +352,22 @@ def download_protenix_weights():
     logger.info(f"Protenix weights ready at {VOLUME_PROTENIX_CACHE}")
 
 
-@app.function(image=immunebuilder_image, volumes={VOLUME_ROOT: volume}, timeout=HOURS_6)
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
 def download_immunebuilder_weights():
-    """Pre-stage ImmuneBuilder weights by letting each predictor download into the volume.
-
-    Constructing a predictor downloads only the weight files it is missing, so this is
-    idempotent and resumes a partial stage rather than restarting or skipping it. The
-    weights are hosted on Zenodo, which is bandwidth-throttled, so a full stage can take
-    several minutes per model. It is a one-time cost, since the weights then live on the
-    volume.
-    """
-    from ImmuneBuilder import ABodyBuilder2, NanoBodyBuilder2, TCRBuilder2  # pyright: ignore[reportMissingImports]
+    """Pre-stage ImmuneBuilder weights straight from the Zenodo records the package points at."""
+    import urllib.request
 
     volume.reload()
-    Path(VOLUME_IMMUNEBUILDER_CACHE).mkdir(parents=True, exist_ok=True)
-    logger.info("Downloading ImmuneBuilder weights from Zenodo. Note that Zenudo transfer rates can be slow.")
-    for predictor in (ABodyBuilder2, NanoBodyBuilder2, TCRBuilder2):
-        logger.info(f"Downloading ImmuneBuilder weights: {predictor.__name__}")
-        predictor(weights_dir=VOLUME_IMMUNEBUILDER_CACHE)
+    cache_path = Path(VOLUME_IMMUNEBUILDER_CACHE)
+    cache_path.mkdir(parents=True, exist_ok=True)
+    missing = [(name, record) for name, record in IMMUNEBUILDER_WEIGHTS if not (cache_path / name).exists()]
+    if not missing:
+        logger.info("ImmuneBuilder weights already on the volume. Skipping download.")
+        return
+    for name, record in missing:
+        url = f"{IMMUNEBUILDER_ZENODO_BASE}/{record}/files/{name}?download=1"
+        logger.info(f"Downloading ImmuneBuilder weights: {url}")
+        urllib.request.urlretrieve(url, cache_path / name)
     volume.commit()
     logger.info(f"ImmuneBuilder weights ready at {VOLUME_IMMUNEBUILDER_CACHE}")
 
