@@ -11,9 +11,9 @@ from pydantic import BaseModel, Field, model_validator
 from common.utils import format_run_log, mark_job_complete, mark_job_failed, persist_job_output
 from config import ESMC_GPU, ESMC_MAX_CONTAINERS, ESMC_SCALEDOWN_WINDOW, ESMC_TIMEOUT
 from constants import (
+    AMINO_ACID_ONE_LETTER,
     ESMC_600M_WEIGHTS_REPO,
     ESMC_SPEC,
-    ONE_LETTER_AMINO_ACIDS,
     PYDANTIC_SPEC,
     PYTHON_3_12,
     SERVICE_SOURCES,
@@ -132,7 +132,7 @@ def write_variant_scores(model, sequences: list[str], output_dir: Path) -> None:
 
     Follows the ESMC mutation-scoring method: mask each position in turn, run the
     model, and read the predicted distribution at that position. Each file holds an
-    llr matrix of shape [length, 20] over ONE_LETTER_AMINO_ACIDS, where each entry is the
+    llr matrix of shape [length, 20] over AMINO_ACID_ONE_LETTER, where each entry is the
     log-likelihood ratio of a substitution against the wild-type residue, so the
     wild type is 0 and negative is deleterious. It also holds a per-position entropy
     in bits, a measure of how constrained the position is.
@@ -146,12 +146,12 @@ def write_variant_scores(model, sequences: list[str], output_dir: Path) -> None:
     from esm.tokenization import get_esmc_model_tokenizers  # pyright: ignore[reportMissingImports]
 
     vocab = get_esmc_model_tokenizers().get_vocab()
-    aa_indices = [vocab[aa] for aa in ONE_LETTER_AMINO_ACIDS]
+    aa_indices = [vocab[aa] for aa in AMINO_ACID_ONE_LETTER]
     config = LogitsConfig(sequence=True)
 
     for i, sequence in enumerate(sequences):
         length = len(sequence)
-        llr = np.zeros((length, len(ONE_LETTER_AMINO_ACIDS)), dtype=np.float32)
+        llr = np.zeros((length, len(AMINO_ACID_ONE_LETTER)), dtype=np.float32)
         entropy = np.zeros(length, dtype=np.float32)
         for position in range(length):
             masked = sequence[:position] + "_" + sequence[position + 1 :]
@@ -211,7 +211,7 @@ def run(job_id: str, job_name: str | None, params: dict) -> None:
                 summary = f"Embedded {len(job_params.sequences)} sequence(s), embedding dim {embedding_dim}"
             else:
                 write_variant_scores(model, job_params.sequences, output_dir)
-                metadata["amino_acids"] = ONE_LETTER_AMINO_ACIDS
+                metadata["amino_acids"] = AMINO_ACID_ONE_LETTER
                 metadata["method"] = "masked leave-one-out log-likelihood ratios"
                 summary = f"Scored variants for {len(job_params.sequences)} sequence(s)"
 

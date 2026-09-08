@@ -1,4 +1,4 @@
-.PHONY: install install-dev setup deploy deploy-custom format typecheck test openapi
+.PHONY: install install-dev setup deploy format typecheck test openapi
 
 export UV_FROZEN := 1
 
@@ -13,13 +13,6 @@ setup:
 
 deploy:
 	uv run modal deploy app.py
-
-deploy-custom:
-	@[ -f .env ] || { echo "deploy-custom needs a .env file. Copy .env.example to .env."; exit 1; }
-	set -a; \
-	. ./.env; \
-	set +a; \
-	$(MAKE) deploy
 
 format:
 	uv run ruff check --fix .

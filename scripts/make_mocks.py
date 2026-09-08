@@ -4,17 +4,17 @@ Submits the service's committed request, waits for the job to finish, then
 replaces the fixture with the job's downloaded output. This runs real compute on
 a GPU, so it is meant to be run rarely and deliberately, not as part of a test.
 
-Reads the deployment URL from FOLDWAYS_API_URL. The recorded fixture overwrites
-whatever was there before, so review the diff before committing it.
+Takes the deployment URL from --url. The recorded fixture overwrites whatever was
+there before, so review the diff before committing it.
 
 Run it as a module from the repository root, so the project's imports resolve:
 
-    uv run python -m scripts.make_mocks boltz2
+    uv run python -m scripts.make_mocks boltz2 --url https://<workspace>--foldways-api.modal.run
 """
 
+import argparse
 import io
 import json
-import os
 import shutil
 import sys
 import time
@@ -23,24 +23,21 @@ from pathlib import Path
 
 import httpx2
 
-from constants import JOB_COMPLETE_MARKER, LOCAL_MOCKS_DIR, MINUTES_40, MOCK_OUTPUT_DIR, MOCK_REQUEST_FILE, JobState
+from common.registries import JobState
+from constants import JOB_COMPLETE_MARKER, LOCAL_MOCKS_DIR, MINUTES_40, MOCK_OUTPUT_DIR, MOCK_REQUEST_FILE
 
 POLL_INTERVAL_SECONDS = 10
 JOB_TIMEOUT_SECONDS = MINUTES_40
 
 
-def main(service: str) -> None:
+def main(service: str, url: str) -> None:
     """Record the fixture for one service, named as its mocks/ subdirectory."""
-    api_url = os.environ.get("FOLDWAYS_API_URL")
-    if not api_url:
-        sys.exit("FOLDWAYS_API_URL is not set. Point it at your deployment.")
-
     service_dir = Path(__file__).parent.parent / LOCAL_MOCKS_DIR / service
     request_path = service_dir / MOCK_REQUEST_FILE
     if not request_path.exists():
         sys.exit(f"No request at {request_path}. Write one before recording a fixture.")
 
-    with httpx2.Client(base_url=api_url.rstrip("/"), timeout=60) as client:
+    with httpx2.Client(base_url=url.rstrip("/"), timeout=60) as client:
         response = client.post("/jobs", json=json.loads(request_path.read_text()))
         response.raise_for_status()
         job_id = response.json()["id"]
@@ -78,6 +75,8 @@ def main(service: str) -> None:
 
 
 if __name__ == "__main__":
-    if len(sys.argv) != 2:
-        sys.exit("Usage: uv run python -m scripts.make_mocks <service>")
-    main(sys.argv[1])
+    parser = argparse.ArgumentParser(description="Record a service's mock fixture from a real run.")
+    parser.add_argument("service", help="Service name, matching its mocks/ subdirectory.")
+    parser.add_argument("--url", required=True, help="Deployment URL, e.g. https://<workspace>--foldways-api.modal.run")
+    args = parser.parse_args()
+    main(args.service, args.url)

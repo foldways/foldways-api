@@ -1,78 +1,231 @@
-import os
+import functools
+import tomllib
+from dataclasses import dataclass, replace
+from pathlib import Path
 
-from constants import GPU_H100, GPU_L4, GPU_T4, HOURS_6, MAX_CONTAINERS, MINUTES_1, MINUTES_10, MINUTES_15, MINUTES_30
+from constants import (
+    FOLDWAYS_TOML_CONFIG_FILENAME,
+    FOLDWAYS_TOML_CONFIG_REMOTE_PATH,
+    GPU_H100,
+    GPU_L4,
+    GPU_T4,
+    HOURS_6,
+    MAX_CONTAINERS,
+    MINUTES_1,
+    MINUTES_10,
+    MINUTES_15,
+    MINUTES_30,
+)
 
-BOLTZ2_GPU = os.environ.get("BOLTZ2_GPU", GPU_H100)
-BOLTZ2_TIMEOUT = int(os.environ.get("BOLTZ2_TIMEOUT", MINUTES_30))
-BOLTZ2_MAX_CONTAINERS = int(os.environ.get("BOLTZ2_MAX_CONTAINERS", MAX_CONTAINERS))
-BOLTZ2_SCALEDOWN_WINDOW = int(os.environ.get("BOLTZ2_SCALEDOWN_WINDOW", MINUTES_1))
 
-ESMC_GPU = os.environ.get("ESMC_GPU", GPU_L4)
-ESMC_TIMEOUT = int(os.environ.get("ESMC_TIMEOUT", MINUTES_10))
-ESMC_MAX_CONTAINERS = int(os.environ.get("ESMC_MAX_CONTAINERS", MAX_CONTAINERS))
-ESMC_SCALEDOWN_WINDOW = int(os.environ.get("ESMC_SCALEDOWN_WINDOW", MINUTES_1))
+@dataclass(frozen=True)
+class RegistryEntry:
+    """One service's static wiring, enough to build it without importing it.
 
-ESMFOLD2_GPU = os.environ.get("ESMFOLD2_GPU", GPU_H100)
-ESMFOLD2_TIMEOUT = int(os.environ.get("ESMFOLD2_TIMEOUT", MINUTES_30))
-ESMFOLD2_MAX_CONTAINERS = int(os.environ.get("ESMFOLD2_MAX_CONTAINERS", MAX_CONTAINERS))
-ESMFOLD2_SCALEDOWN_WINDOW = int(os.environ.get("ESMFOLD2_SCALEDOWN_WINDOW", MINUTES_1))
+    `module` is imported lazily, only when the service is enabled, and `params` is
+    the name of its params model within that module.
+    """
 
-ESM3_GPU = os.environ.get("ESM3_GPU", GPU_H100)
-ESM3_TIMEOUT = int(os.environ.get("ESM3_TIMEOUT", MINUTES_15))
-ESM3_MAX_CONTAINERS = int(os.environ.get("ESM3_MAX_CONTAINERS", MAX_CONTAINERS))
-ESM3_SCALEDOWN_WINDOW = int(os.environ.get("ESM3_SCALEDOWN_WINDOW", MINUTES_1))
+    module: str
+    params: str
+    description: str
 
-BOLTZGEN_GPU = os.environ.get("BOLTZGEN_GPU", GPU_H100)
-BOLTZGEN_TIMEOUT = int(os.environ.get("BOLTZGEN_TIMEOUT", MINUTES_30))
-BOLTZGEN_MAX_CONTAINERS = int(os.environ.get("BOLTZGEN_MAX_CONTAINERS", MAX_CONTAINERS))
-BOLTZGEN_SCALEDOWN_WINDOW = int(os.environ.get("BOLTZGEN_SCALEDOWN_WINDOW", MINUTES_1))
 
-PROTEINMPNN_GPU = os.environ.get("PROTEINMPNN_GPU", GPU_L4)
-PROTEINMPNN_TIMEOUT = int(os.environ.get("PROTEINMPNN_TIMEOUT", MINUTES_10))
-PROTEINMPNN_MAX_CONTAINERS = int(os.environ.get("PROTEINMPNN_MAX_CONTAINERS", MAX_CONTAINERS))
-PROTEINMPNN_SCALEDOWN_WINDOW = int(os.environ.get("PROTEINMPNN_SCALEDOWN_WINDOW", MINUTES_1))
+SERVICE_REGISTRY: dict[str, RegistryEntry] = {
+    "boltz2": RegistryEntry(
+        "services.boltz2", "Boltz2Params", "Boltz-2 biomolecular structure and binding-affinity prediction."
+    ),
+    "esmc": RegistryEntry("services.esmc", "ESMCParams", "ESMC protein language model sequence embeddings."),
+    "esmfold2": RegistryEntry(
+        "services.esmfold2", "ESMFold2Params", "ESMFold2 all-atom biomolecular structure prediction."
+    ),
+    "esm3": RegistryEntry(
+        "services.esm3", "ESM3Params", "ESM3 generative protein design across sequence and structure."
+    ),
+    "boltzgen": RegistryEntry("services.boltzgen", "BoltzGenParams", "BoltzGen de novo protein design."),
+    "proteinmpnn": RegistryEntry(
+        "services.proteinmpnn", "ProteinMPNNParams", "ProteinMPNN inverse folding, sequence design for a backbone."
+    ),
+    "ligandmpnn": RegistryEntry(
+        "services.ligandmpnn",
+        "LigandMPNNParams",
+        "LigandMPNN inverse folding, sequence design for a backbone in its ligand context.",
+    ),
+    "solublempnn": RegistryEntry(
+        "services.solublempnn",
+        "SolubleMPNNParams",
+        "SolubleMPNN inverse folding, sequence design for a backbone biased toward soluble proteins.",
+    ),
+    "thermompnn": RegistryEntry(
+        "services.thermompnn",
+        "ThermoMPNNParams",
+        "ThermoMPNN point-mutation stability (ddG) prediction by site-saturation mutagenesis.",
+    ),
+    "chai": RegistryEntry(
+        "services.chai",
+        "ChaiParams",
+        "Chai-1 all-atom structure prediction for proteins, ligands, nucleic acids, and glycans.",
+    ),
+    "bindcraft": RegistryEntry(
+        "services.bindcraft", "BindCraftParams", "BindCraft de novo binder design against a target structure."
+    ),
+    "vesm": RegistryEntry(
+        "services.vesm",
+        "VESMParams",
+        "VESM variant effect prediction, log-likelihood-ratio scores for sequence mutations.",
+    ),
+    "intellifold": RegistryEntry(
+        "services.intellifold",
+        "IntelliFoldParams",
+        "IntelliFold all-atom structure prediction for proteins, ligands, and nucleic acids.",
+    ),
+    "immunebuilder": RegistryEntry(
+        "services.immunebuilder",
+        "ImmuneBuilderParams",
+        "ImmuneBuilder structure prediction for antibodies, nanobodies, and T-cell receptors.",
+    ),
+    "protenix": RegistryEntry(
+        "services.protenix",
+        "ProtenixParams",
+        "Protenix all-atom structure prediction for proteins, ligands, nucleic acids, and ions.",
+    ),
+}
 
-LIGANDMPNN_GPU = os.environ.get("LIGANDMPNN_GPU", GPU_L4)
-LIGANDMPNN_TIMEOUT = int(os.environ.get("LIGANDMPNN_TIMEOUT", MINUTES_10))
-LIGANDMPNN_MAX_CONTAINERS = int(os.environ.get("LIGANDMPNN_MAX_CONTAINERS", MAX_CONTAINERS))
-LIGANDMPNN_SCALEDOWN_WINDOW = int(os.environ.get("LIGANDMPNN_SCALEDOWN_WINDOW", MINUTES_1))
 
-SOLUBLEMPNN_GPU = os.environ.get("SOLUBLEMPNN_GPU", GPU_L4)
-SOLUBLEMPNN_TIMEOUT = int(os.environ.get("SOLUBLEMPNN_TIMEOUT", MINUTES_10))
-SOLUBLEMPNN_MAX_CONTAINERS = int(os.environ.get("SOLUBLEMPNN_MAX_CONTAINERS", MAX_CONTAINERS))
-SOLUBLEMPNN_SCALEDOWN_WINDOW = int(os.environ.get("SOLUBLEMPNN_SCALEDOWN_WINDOW", MINUTES_1))
+@functools.cache
+def load_foldways_toml_config() -> dict:
+    """Parse the config file once. An absent file reads as empty, meaning all
+    defaults. The mounted copy is tried first, then the repository root."""
+    for path in (Path(FOLDWAYS_TOML_CONFIG_REMOTE_PATH), Path(FOLDWAYS_TOML_CONFIG_FILENAME)):
+        if path.exists():
+            with open(path, "rb") as f:
+                return tomllib.load(f)
+    return {}
 
-BINDCRAFT_GPU = os.environ.get("BINDCRAFT_GPU", GPU_H100)
-BINDCRAFT_TIMEOUT = int(os.environ.get("BINDCRAFT_TIMEOUT", HOURS_6))
-BINDCRAFT_MAX_CONTAINERS = int(os.environ.get("BINDCRAFT_MAX_CONTAINERS", MAX_CONTAINERS))
-BINDCRAFT_SCALEDOWN_WINDOW = int(os.environ.get("BINDCRAFT_SCALEDOWN_WINDOW", MINUTES_1))
 
-THERMOMPNN_GPU = os.environ.get("THERMOMPNN_GPU", GPU_L4)
-THERMOMPNN_TIMEOUT = int(os.environ.get("THERMOMPNN_TIMEOUT", MINUTES_10))
-THERMOMPNN_MAX_CONTAINERS = int(os.environ.get("THERMOMPNN_MAX_CONTAINERS", MAX_CONTAINERS))
-THERMOMPNN_SCALEDOWN_WINDOW = int(os.environ.get("THERMOMPNN_SCALEDOWN_WINDOW", MINUTES_1))
+def get_enabled_services() -> list[str]:
+    """Return the service names to include, in registry order."""
+    names = list(SERVICE_REGISTRY)
+    enabled = load_foldways_toml_config().get("services", {}).get("enabled", [])
+    if not enabled:
+        return names
+    unknown = sorted(set(enabled) - set(SERVICE_REGISTRY))
+    if unknown:
+        raise ValueError(
+            f"Unknown service(s) in {FOLDWAYS_TOML_CONFIG_FILENAME} [services].enabled: {unknown}. Valid services are: {names}."
+        )
+    selected = set(enabled)
+    return [name for name in names if name in selected]
 
-CHAI_GPU = os.environ.get("CHAI_GPU", GPU_H100)
-CHAI_TIMEOUT = int(os.environ.get("CHAI_TIMEOUT", MINUTES_30))
-CHAI_MAX_CONTAINERS = int(os.environ.get("CHAI_MAX_CONTAINERS", MAX_CONTAINERS))
-CHAI_SCALEDOWN_WINDOW = int(os.environ.get("CHAI_SCALEDOWN_WINDOW", MINUTES_1))
 
-VESM_GPU = os.environ.get("VESM_GPU", GPU_L4)
-VESM_TIMEOUT = int(os.environ.get("VESM_TIMEOUT", MINUTES_10))
-VESM_MAX_CONTAINERS = int(os.environ.get("VESM_MAX_CONTAINERS", MAX_CONTAINERS))
-VESM_SCALEDOWN_WINDOW = int(os.environ.get("VESM_SCALEDOWN_WINDOW", MINUTES_1))
+@dataclass(frozen=True)
+class ServiceCompute:
+    """Compute settings for one service."""
 
-INTELLIFOLD_GPU = os.environ.get("INTELLIFOLD_GPU", GPU_H100)
-INTELLIFOLD_TIMEOUT = int(os.environ.get("INTELLIFOLD_TIMEOUT", MINUTES_30))
-INTELLIFOLD_MAX_CONTAINERS = int(os.environ.get("INTELLIFOLD_MAX_CONTAINERS", MAX_CONTAINERS))
-INTELLIFOLD_SCALEDOWN_WINDOW = int(os.environ.get("INTELLIFOLD_SCALEDOWN_WINDOW", MINUTES_1))
+    gpu: str
+    timeout: int
+    max_containers: int = MAX_CONTAINERS
+    scaledown_window: int = MINUTES_1
 
-IMMUNEBUILDER_GPU = os.environ.get("IMMUNEBUILDER_GPU", GPU_T4)
-IMMUNEBUILDER_TIMEOUT = int(os.environ.get("IMMUNEBUILDER_TIMEOUT", MINUTES_15))
-IMMUNEBUILDER_MAX_CONTAINERS = int(os.environ.get("IMMUNEBUILDER_MAX_CONTAINERS", MAX_CONTAINERS))
-IMMUNEBUILDER_SCALEDOWN_WINDOW = int(os.environ.get("IMMUNEBUILDER_SCALEDOWN_WINDOW", MINUTES_1))
 
-PROTENIX_GPU = os.environ.get("PROTENIX_GPU", GPU_H100)
-PROTENIX_TIMEOUT = int(os.environ.get("PROTENIX_TIMEOUT", MINUTES_30))
-PROTENIX_MAX_CONTAINERS = int(os.environ.get("PROTENIX_MAX_CONTAINERS", MAX_CONTAINERS))
-PROTENIX_SCALEDOWN_WINDOW = int(os.environ.get("PROTENIX_SCALEDOWN_WINDOW", MINUTES_1))
+SERVICE_DEFAULTS: dict[str, ServiceCompute] = {
+    "boltz2": ServiceCompute(GPU_H100, MINUTES_30),
+    "esmc": ServiceCompute(GPU_L4, MINUTES_10),
+    "esmfold2": ServiceCompute(GPU_H100, MINUTES_30),
+    "esm3": ServiceCompute(GPU_H100, MINUTES_15),
+    "boltzgen": ServiceCompute(GPU_H100, MINUTES_30),
+    "proteinmpnn": ServiceCompute(GPU_L4, MINUTES_10),
+    "ligandmpnn": ServiceCompute(GPU_L4, MINUTES_10),
+    "solublempnn": ServiceCompute(GPU_L4, MINUTES_10),
+    "thermompnn": ServiceCompute(GPU_L4, MINUTES_10),
+    "chai": ServiceCompute(GPU_H100, MINUTES_30),
+    "bindcraft": ServiceCompute(GPU_H100, HOURS_6),
+    "vesm": ServiceCompute(GPU_L4, MINUTES_10),
+    "intellifold": ServiceCompute(GPU_H100, MINUTES_30),
+    "immunebuilder": ServiceCompute(GPU_T4, MINUTES_15),
+    "protenix": ServiceCompute(GPU_H100, MINUTES_30),
+}
+
+
+@functools.cache
+def get_service_compute(name: str) -> ServiceCompute:
+    """Return a service's compute settings, the file's overrides merged over the
+    defaults. An unrecognized key in the file's table raises, so a typo fails loudly."""
+    overrides = load_foldways_toml_config().get("services", {}).get(name, {})
+    return replace(SERVICE_DEFAULTS[name], **overrides)
+
+
+BOLTZ2_GPU = get_service_compute("boltz2").gpu
+BOLTZ2_TIMEOUT = get_service_compute("boltz2").timeout
+BOLTZ2_MAX_CONTAINERS = get_service_compute("boltz2").max_containers
+BOLTZ2_SCALEDOWN_WINDOW = get_service_compute("boltz2").scaledown_window
+
+ESMC_GPU = get_service_compute("esmc").gpu
+ESMC_TIMEOUT = get_service_compute("esmc").timeout
+ESMC_MAX_CONTAINERS = get_service_compute("esmc").max_containers
+ESMC_SCALEDOWN_WINDOW = get_service_compute("esmc").scaledown_window
+
+ESMFOLD2_GPU = get_service_compute("esmfold2").gpu
+ESMFOLD2_TIMEOUT = get_service_compute("esmfold2").timeout
+ESMFOLD2_MAX_CONTAINERS = get_service_compute("esmfold2").max_containers
+ESMFOLD2_SCALEDOWN_WINDOW = get_service_compute("esmfold2").scaledown_window
+
+ESM3_GPU = get_service_compute("esm3").gpu
+ESM3_TIMEOUT = get_service_compute("esm3").timeout
+ESM3_MAX_CONTAINERS = get_service_compute("esm3").max_containers
+ESM3_SCALEDOWN_WINDOW = get_service_compute("esm3").scaledown_window
+
+BOLTZGEN_GPU = get_service_compute("boltzgen").gpu
+BOLTZGEN_TIMEOUT = get_service_compute("boltzgen").timeout
+BOLTZGEN_MAX_CONTAINERS = get_service_compute("boltzgen").max_containers
+BOLTZGEN_SCALEDOWN_WINDOW = get_service_compute("boltzgen").scaledown_window
+
+PROTEINMPNN_GPU = get_service_compute("proteinmpnn").gpu
+PROTEINMPNN_TIMEOUT = get_service_compute("proteinmpnn").timeout
+PROTEINMPNN_MAX_CONTAINERS = get_service_compute("proteinmpnn").max_containers
+PROTEINMPNN_SCALEDOWN_WINDOW = get_service_compute("proteinmpnn").scaledown_window
+
+LIGANDMPNN_GPU = get_service_compute("ligandmpnn").gpu
+LIGANDMPNN_TIMEOUT = get_service_compute("ligandmpnn").timeout
+LIGANDMPNN_MAX_CONTAINERS = get_service_compute("ligandmpnn").max_containers
+LIGANDMPNN_SCALEDOWN_WINDOW = get_service_compute("ligandmpnn").scaledown_window
+
+SOLUBLEMPNN_GPU = get_service_compute("solublempnn").gpu
+SOLUBLEMPNN_TIMEOUT = get_service_compute("solublempnn").timeout
+SOLUBLEMPNN_MAX_CONTAINERS = get_service_compute("solublempnn").max_containers
+SOLUBLEMPNN_SCALEDOWN_WINDOW = get_service_compute("solublempnn").scaledown_window
+
+THERMOMPNN_GPU = get_service_compute("thermompnn").gpu
+THERMOMPNN_TIMEOUT = get_service_compute("thermompnn").timeout
+THERMOMPNN_MAX_CONTAINERS = get_service_compute("thermompnn").max_containers
+THERMOMPNN_SCALEDOWN_WINDOW = get_service_compute("thermompnn").scaledown_window
+
+CHAI_GPU = get_service_compute("chai").gpu
+CHAI_TIMEOUT = get_service_compute("chai").timeout
+CHAI_MAX_CONTAINERS = get_service_compute("chai").max_containers
+CHAI_SCALEDOWN_WINDOW = get_service_compute("chai").scaledown_window
+
+BINDCRAFT_GPU = get_service_compute("bindcraft").gpu
+BINDCRAFT_TIMEOUT = get_service_compute("bindcraft").timeout
+BINDCRAFT_MAX_CONTAINERS = get_service_compute("bindcraft").max_containers
+BINDCRAFT_SCALEDOWN_WINDOW = get_service_compute("bindcraft").scaledown_window
+
+VESM_GPU = get_service_compute("vesm").gpu
+VESM_TIMEOUT = get_service_compute("vesm").timeout
+VESM_MAX_CONTAINERS = get_service_compute("vesm").max_containers
+VESM_SCALEDOWN_WINDOW = get_service_compute("vesm").scaledown_window
+
+INTELLIFOLD_GPU = get_service_compute("intellifold").gpu
+INTELLIFOLD_TIMEOUT = get_service_compute("intellifold").timeout
+INTELLIFOLD_MAX_CONTAINERS = get_service_compute("intellifold").max_containers
+INTELLIFOLD_SCALEDOWN_WINDOW = get_service_compute("intellifold").scaledown_window
+
+IMMUNEBUILDER_GPU = get_service_compute("immunebuilder").gpu
+IMMUNEBUILDER_TIMEOUT = get_service_compute("immunebuilder").timeout
+IMMUNEBUILDER_MAX_CONTAINERS = get_service_compute("immunebuilder").max_containers
+IMMUNEBUILDER_SCALEDOWN_WINDOW = get_service_compute("immunebuilder").scaledown_window
+
+PROTENIX_GPU = get_service_compute("protenix").gpu
+PROTENIX_TIMEOUT = get_service_compute("protenix").timeout
+PROTENIX_MAX_CONTAINERS = get_service_compute("protenix").max_containers
+PROTENIX_SCALEDOWN_WINDOW = get_service_compute("protenix").scaledown_window

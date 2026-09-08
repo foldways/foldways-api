@@ -1,0 +1,110 @@
+# Copy this file to foldways.toml and edit it. See the README for instructions.
+
+[services]
+enabled = [
+    "boltz2",
+    "esmc",
+    "esmfold2",
+    "esm3",
+    "boltzgen",
+    "proteinmpnn",
+    "ligandmpnn",
+    "solublempnn",
+    "thermompnn",
+    "chai",
+    "bindcraft",
+    "vesm",
+    "intellifold",
+    "immunebuilder",
+    "protenix",
+]
+
+[services.boltz2]
+gpu = "H100"
+timeout = 1800
+max_containers = 5
+scaledown_window = 60
+
+[services.esmc]
+gpu = "L4"
+timeout = 600
+max_containers = 5
+scaledown_window = 60
+
+[services.esmfold2]
+gpu = "H100"
+timeout = 1800
+max_containers = 5
+scaledown_window = 60
+
+[services.esm3]
+gpu = "H100"
+timeout = 900
+max_containers = 5
+scaledown_window = 60
+
+[services.boltzgen]
+gpu = "H100"
+timeout = 1800
+max_containers = 5
+scaledown_window = 60
+
+[services.proteinmpnn]
+gpu = "L4"
+timeout = 600
+max_containers = 5
+scaledown_window = 60
+
+[services.ligandmpnn]
+gpu = "L4"
+timeout = 600
+max_containers = 5
+scaledown_window = 60
+
+[services.solublempnn]
+gpu = "L4"
+timeout = 600
+max_containers = 5
+scaledown_window = 60
+
+[services.thermompnn]
+gpu = "L4"
+timeout = 600
+max_containers = 5
+scaledown_window = 60
+
+[services.chai]
+gpu = "H100"
+timeout = 1800
+max_containers = 5
+scaledown_window = 60
+
+[services.bindcraft]
+gpu = "H100"
+timeout = 21600
+max_containers = 5
+scaledown_window = 60
+
+[services.vesm]
+gpu = "L4"
+timeout = 600
+max_containers = 5
+scaledown_window = 60
+
+[services.intellifold]
+gpu = "H100"
+timeout = 1800
+max_containers = 5
+scaledown_window = 60
+
+[services.immunebuilder]
+gpu = "T4"
+timeout = 900
+max_containers = 5
+scaledown_window = 60
+
+[services.protenix]
+gpu = "H100"
+timeout = 1800
+max_containers = 5
+scaledown_window = 60

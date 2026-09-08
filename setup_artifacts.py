@@ -3,6 +3,7 @@ from pathlib import Path
 
 import modal
 
+from config import get_enabled_services
 from constants import (
     BINDCRAFT_AF2_PARAMS_DIR,
     BINDCRAFT_AF2_PARAMS_MARKER,
@@ -62,7 +63,9 @@ from core import app, volume
 logger = logging.getLogger(__name__)
 
 
-download_image = modal.Image.debian_slim().pip_install("huggingface_hub").add_local_python_source("constants", "core")
+download_image = (
+    modal.Image.debian_slim().pip_install("huggingface_hub").add_local_python_source("config", "constants", "core")
+)
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
@@ -380,22 +383,30 @@ def upload_mocks():
     logger.info(f"Mock fixtures ready at {VOLUME_MOCKS_DIR}")
 
 
+DOWNLOADERS = {
+    "boltz2": download_boltz2_weights,
+    "esmc": download_esmc_weights,
+    "esmfold2": download_esmfold2_weights,
+    "esm3": download_esm3_weights,
+    "chai": download_chai_weights,
+    "boltzgen": download_boltzgen_weights,
+    "proteinmpnn": download_proteinmpnn_weights,
+    "ligandmpnn": download_ligandmpnn_weights,
+    "solublempnn": download_solublempnn_weights,
+    "bindcraft": download_bindcraft_weights,
+    "vesm": download_vesm_weights,
+    "intellifold": download_intellifold_weights,
+    "immunebuilder": download_immunebuilder_weights,
+    "protenix": download_protenix_weights,
+}
+
+
 @app.local_entrypoint()
 def main():
     logger.info("Setting up artifacts on the Modal volume...")
-    download_boltz2_weights.remote()
-    download_esmc_weights.remote()
-    download_esmfold2_weights.remote()
-    download_esm3_weights.remote()
-    download_chai_weights.remote()
-    download_boltzgen_weights.remote()
-    download_proteinmpnn_weights.remote()
-    download_ligandmpnn_weights.remote()
-    download_solublempnn_weights.remote()
-    download_bindcraft_weights.remote()
-    download_vesm_weights.remote()
-    download_intellifold_weights.remote()
-    download_immunebuilder_weights.remote()
-    download_protenix_weights.remote()
+    for name in get_enabled_services():
+        downloader = DOWNLOADERS.get(name)
+        if downloader is not None:
+            downloader.remote()
     upload_mocks()
     logger.info("Artifact setup complete.")
