@@ -1,6 +1,27 @@
+from enum import StrEnum
 from typing import TypedDict
 
 import modal
+
+
+class JobState(StrEnum):
+    """The status values a single job can report."""
+
+    PENDING = "pending"
+    COMPLETE = "complete"
+    FAILED = "failed"
+    INIT_FAILED = "init_failed"
+    STOPPED = "stopped"
+    TIMED_OUT = "timed_out"
+    UNKNOWN = "unknown"
+
+
+class BatchState(StrEnum):
+    """The status values a batch can report, aggregated from its jobs."""
+
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    COMPLETED_WITH_FAILURES = "completed_with_failures"
 
 
 class JobRecord(TypedDict):

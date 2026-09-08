@@ -1,5 +1,3 @@
-from enum import StrEnum
-
 APP_NAME = "foldways"
 API_VERSION = "0.14.0"
 ROUTE_PREFIX = ""
@@ -8,6 +6,9 @@ MOCK_OUTPUT_DIR = "output"
 MOCK_REQUEST_FILE = "request.json"
 SERVICE_SOURCES = ("config", "constants", "core", "services", "common")
 API_SOURCES = SERVICE_SOURCES + ("api",)
+
+FOLDWAYS_TOML_CONFIG_FILENAME = "foldways.toml"
+FOLDWAYS_TOML_CONFIG_REMOTE_PATH = f"/root/{FOLDWAYS_TOML_CONFIG_FILENAME}"
 
 # Modal volume config
 VOLUME_NAME = "foldways-data"
@@ -223,24 +224,4 @@ BINDCRAFT_SETTINGS_ADVANCED_DIR = f"{BINDCRAFT_DIR}/settings_advanced"
 BINDCRAFT_SETTINGS_FILTERS_DIR = f"{BINDCRAFT_DIR}/settings_filters"
 
 # Amino acids
-ONE_LETTER_AMINO_ACIDS = "ACDEFGHIKLMNPQRSTVWY"
-
-
-class JobState(StrEnum):
-    """The status values a single job can report."""
-
-    PENDING = "pending"
-    COMPLETE = "complete"
-    FAILED = "failed"
-    INIT_FAILED = "init_failed"
-    STOPPED = "stopped"
-    TIMED_OUT = "timed_out"
-    UNKNOWN = "unknown"
-
-
-class BatchState(StrEnum):
-    """The status values a batch can report, aggregated from its jobs."""
-
-    IN_PROGRESS = "in_progress"
-    COMPLETED = "completed"
-    COMPLETED_WITH_FAILURES = "completed_with_failures"
+AMINO_ACID_ONE_LETTER = "ACDEFGHIKLMNPQRSTVWY"

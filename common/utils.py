@@ -10,15 +10,13 @@ from typing import Protocol
 import modal
 from modal.types import InputStatus
 
-from common.registries import JobRecord
+from common.registries import BatchState, JobRecord, JobState
 from constants import (
     JOB_COMPLETE_MARKER,
     JOB_ERROR_MARKER,
     MOCK_OUTPUT_DIR,
     VOLUME_JOBS_DIR,
     VOLUME_MOCKS_DIR,
-    BatchState,
-    JobState,
 )
 from core import volume
 

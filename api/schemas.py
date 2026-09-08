@@ -2,7 +2,7 @@ from datetime import datetime
 
 from pydantic import BaseModel
 
-from constants import BatchState, JobState
+from common.registries import BatchState, JobState
 
 
 class JobRequest(BaseModel):

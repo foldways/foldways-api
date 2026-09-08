@@ -7,10 +7,10 @@ from fastapi import HTTPException
 from pydantic import ValidationError
 
 from api.schemas import JobRequest, JobStatus
-from common.registries import JobRecord, jobs_registry
+from common.registries import JobRecord, JobState, jobs_registry
 from common.services import SERVICES
 from common.utils import check_mock_exists, mark_job_complete, persist_job_output
-from constants import JOB_COMPLETE_MARKER, MOCK_OUTPUT_DIR, VOLUME_MOCKS_DIR, JobState
+from constants import JOB_COMPLETE_MARKER, MOCK_OUTPUT_DIR, VOLUME_MOCKS_DIR
 from core import volume
 
 

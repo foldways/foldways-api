@@ -15,9 +15,8 @@ from api.schemas import (
     JobStatus,
 )
 from api.utils import reload_volume, spawn_job, validate_job_request
-from common.registries import BatchRecord, JobRecord, batches_registry, jobs_registry
+from common.registries import BatchRecord, JobRecord, JobState, batches_registry, jobs_registry
 from common.utils import delete_job_data, get_batch_status, get_job_status
-from constants import JobState
 
 logger = logging.getLogger(__name__)
 

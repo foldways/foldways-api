@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field, model_validator
 from common.utils import format_run_log, mark_job_complete, mark_job_failed, persist_job_output
 from config import VESM_GPU, VESM_MAX_CONTAINERS, VESM_SCALEDOWN_WINDOW, VESM_TIMEOUT
 from constants import (
-    ONE_LETTER_AMINO_ACIDS,
+    AMINO_ACID_ONE_LETTER,
     PYDANTIC_SPEC,
     PYTHON_3_12,
     SERVICE_SOURCES,
@@ -82,7 +82,7 @@ class VESMParams(BaseModel):
         for variant in self.mutations:
             for mutation in variant.split(":"):
                 wildtype, position, mutant = mutation[:1], mutation[1:-1], mutation[-1:]
-                if wildtype not in ONE_LETTER_AMINO_ACIDS or mutant not in ONE_LETTER_AMINO_ACIDS:
+                if wildtype not in AMINO_ACID_ONE_LETTER or mutant not in AMINO_ACID_ONE_LETTER:
                     raise ValueError(f"Mutation '{mutation}' must be a residue, a position, and a residue, e.g. M1Y.")
                 if not position.isdigit() or not 1 <= int(position) <= len(self.sequence):
                     raise ValueError(f"Mutation '{mutation}' has a position outside the sequence.")

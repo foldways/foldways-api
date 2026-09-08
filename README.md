@@ -164,8 +164,7 @@ shell first:
 export FOLDWAYS_API_URL=https://<workspace>--foldways-api.modal.run
 ```
 
-Nothing in the app reads this variable. It only keeps the commands below short,
-and you can set it in `.env` instead if you prefer.
+Nothing in the app reads this variable. It only keeps the commands below short.
 
 Submit a job. The response comes back with an id, while the workload runs on a
 GPU in the background.
@@ -251,25 +250,23 @@ To get an agent running jobs, give it your deployment URL and a prompt like:
 
 ## Configuration
 
-Configuration is optional. Foldways API ships with defaults for every service.
+Configuration is optional. Foldways API ships with sensible defaults for every
+service, so with no config file every service is deployed and pre-staged using
+those defaults.
 
-Each service takes four compute settings, prefixed with the service name: GPU
-type, timeout, max containers, and scaledown window. To change any of them, copy
-[`.env.example`](.env.example) to `.env` and override what you need. Defaults
-are resolved in [`config.py`](config.py), and the valid values are listed in
-[`constants.py`](constants.py).
+Configuration lives in one file, `foldways.toml`, and covers two things: which
+services are deployed, and each service's deployment settings (GPU type,
+timeout, max containers, and scaledown window). To customize, copy
+[`foldways.toml.example`](foldways.toml.example) to `foldways.toml` and edit
+what you need.
 
-These settings are read while `modal deploy` builds the app, not while it serves
-traffic, so they are baked into the deployment. Change settings and redeploy for
-them to take effect.
+The example lists every service under `[services].enabled`, so remove the ones
+you do not want. Only the listed services are built, downloaded, and served, and
+leaving the list empty includes all of them.
 
-Deploying as shown above uses the defaults. To deploy with your overrides,
-export `.env` into the shell first, so `modal deploy` can read them:
-
-```bash
-set -a; source .env; set +a
-uv run modal deploy app.py
-```
+These settings are read while `modal deploy` builds the app and while
+`make setup` stages weights, not while the app serves traffic, so they are baked
+into the deployment. Change the file and redeploy for it to take effect.
 
 ## Contributing
 
@@ -288,7 +285,7 @@ docs/               Generated OpenAPI schema (openapi.json)
 app.py              FastAPI app, exposed via modal.asgi_app
 core.py             Modal app, images, and volume
 setup_artifacts.py  Stages weights and mocks onto the volume
-config.py           Environment-backed settings
+config.py           Service registry and settings, read from foldways.toml
 constants.py        Static configuration
 ```
 
@@ -360,8 +357,7 @@ To record or refresh a fixture, submit its request against a live deployment and
 capture the result:
 
 ```bash
-export FOLDWAYS_API_URL=https://<workspace>--foldways-api.modal.run
-uv run python -m scripts.make_mocks boltz2
+uv run python -m scripts.make_mocks boltz2 --url https://<workspace>--foldways-api.modal.run
 ```
 
 This runs real compute on a GPU. It reads `mocks/<service>/request.json`, waits
