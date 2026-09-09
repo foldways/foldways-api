@@ -90,9 +90,9 @@ Pass the name as `service` in a job or batch request, or as the path in
 | BindCraft     | `bindcraft`     | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)       | De novo design       |
 | BoltzGen      | `boltzgen`      | [HannesStark/boltzgen](https://github.com/HannesStark/boltzgen)           | De novo design       |
 | ESM3          | `esm3`          | [Biohub/esm](https://github.com/Biohub/esm)                               | De novo design       |
-| ThermoMPNN    | `thermompnn`    | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)       | Property prediction  |
-| VESM          | `vesm`          | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                     | Property prediction  |
-| ESMC          | `esmc`          | [Biohub/esm](https://github.com/Biohub/esm)                               | Representation       |
+| ThermoMPNN    | `thermompnn`    | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)       | Scoring              |
+| VESM          | `vesm`          | [ntranoslab/vesm](https://github.com/ntranoslab/vesm)                     | Scoring              |
+| ESMC          | `esmc`          | [Biohub/esm](https://github.com/Biohub/esm)                               | Scoring, Embedding   |
 | LigandMPNN    | `ligandmpnn`    | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)             | Sequence design      |
 | ProteinMPNN   | `proteinmpnn`   | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)             | Sequence design      |
 | SolubleMPNN   | `solublempnn`   | [dauparas/LigandMPNN](https://github.com/dauparas/LigandMPNN)             | Sequence design      |
@@ -102,14 +102,14 @@ Pass the name as `service` in a job or batch request, or as the path in
 | Service         | Codebase                                                                    | Type                 |
 | --------------- | --------------------------------------------------------------------------- | -------------------- |
 | OpenDDE         | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)         | Structure prediction |
-| Aggrescan3D     | [lcbio/aggrescan3d](https://bitbucket.org/lcbio/aggrescan3d/src/master/)    | Property prediction  |
-| DeepImmuno      | [frankligy/DeepImmuno](https://github.com/frankligy/DeepImmuno)             | Property prediction  |
-| DeepViscosity   | [Lailabcode/DeepViscosity](https://github.com/Lailabcode/DeepViscosity)     | Property prediction  |
-| ESM-Scan        | [xuebingwu/ESM-Scan](https://github.com/xuebingwu/ESM-Scan)                 | Property prediction  |
-| NetSolP         | [teevee112/NetSolP-1.0](https://github.com/teevee112/NetSolP-1.0)           | Property prediction  |
-| ProteinMPNN-ddg | [PeptoneLtd/proteinmpnn_ddg](https://github.com/PeptoneLtd/proteinmpnn_ddg) | Property prediction  |
-| TemStaPro       | [ievapudz/TemStaPro](https://github.com/ievapudz/TemStaPro)                 | Property prediction  |
-| ThermoMPNN-D    | [Kuhlman-Lab/ThermoMPNN-D](https://github.com/Kuhlman-Lab/ThermoMPNN-D)     | Property prediction  |
+| Aggrescan3D     | [lcbio/aggrescan3d](https://bitbucket.org/lcbio/aggrescan3d/src/master/)    | Scoring              |
+| DeepImmuno      | [frankligy/DeepImmuno](https://github.com/frankligy/DeepImmuno)             | Scoring              |
+| DeepViscosity   | [Lailabcode/DeepViscosity](https://github.com/Lailabcode/DeepViscosity)     | Scoring              |
+| ESM-Scan        | [xuebingwu/ESM-Scan](https://github.com/xuebingwu/ESM-Scan)                 | Scoring              |
+| NetSolP         | [teevee112/NetSolP-1.0](https://github.com/teevee112/NetSolP-1.0)           | Scoring              |
+| ProteinMPNN-ddg | [PeptoneLtd/proteinmpnn_ddg](https://github.com/PeptoneLtd/proteinmpnn_ddg) | Scoring              |
+| TemStaPro       | [ievapudz/TemStaPro](https://github.com/ievapudz/TemStaPro)                 | Scoring              |
+| ThermoMPNN-D    | [Kuhlman-Lab/ThermoMPNN-D](https://github.com/Kuhlman-Lab/ThermoMPNN-D)     | Scoring              |
 | AntiBMPNN       | [zeysun/AntiBMPNN](https://github.com/zeysun/AntiBMPNN)                     | Sequence design      |
 | AntiFold        | [oxpig/AntiFold](https://github.com/oxpig/AntiFold)                         | Sequence design      |
 | BioPhi          | [Merck/BioPhi](https://github.com/Merck/BioPhi)                             | Sequence design      |
