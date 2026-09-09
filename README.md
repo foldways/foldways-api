@@ -124,31 +124,25 @@ Pass the name as `service` in a job or batch request, or as the path in
 
 ## Quickstart
 
-Clone the repository and install dependencies:
+First, clone the repository and authenticate with Modal. This is a one-time
+setup.
 
 ```bash
 git clone git@github.com:foldways/foldways-api.git
 cd foldways-api
-uv sync
-```
-
-Authenticate with Modal:
-
-```bash
 uv run modal setup
 ```
 
-Create the Modal volume and stage model weights and other artifacts onto it:
+From there, standing up the full API takes three steps:
 
 ```bash
-uv run modal run setup_artifacts.py
+make install   # install dependencies
+make setup     # stage model weights onto a Modal volume
+make deploy    # deploy the API to your Modal account
 ```
 
-Deploy the API:
-
-```bash
-uv run modal deploy app.py
-```
+See [Usage](#usage) to find your API URL and submit your first job, or
+[Configuration](#configuration) to deploy only the services you need.
 
 ## Usage
 
