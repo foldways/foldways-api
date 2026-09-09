@@ -22,7 +22,7 @@ from constants import (
     ESMFOLD2_LM_REPO,
     ESMFOLD2_WEIGHTS_REPO,
     IMMUNEBUILDER_WEIGHTS,
-    IMMUNEBUILDER_ZENODO_BASE,
+    IMMUNEBUILDER_WEIGHTS_URL,
     INTELLIFOLD_CCD_FILE,
     INTELLIFOLD_CHECKPOINTS,
     INTELLIFOLD_DATA_FILES,
@@ -85,7 +85,7 @@ def download_boltz2_weights():
         local_dir=VOLUME_BOLTZ2_CACHE,
     )
     volume.commit()
-    logger.info(f"Boltz-2 weights ready at {VOLUME_BOLTZ2_CACHE}")
+    logger.info(f"Boltz-2 weights ready on Modal at {VOLUME_BOLTZ2_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
@@ -101,7 +101,7 @@ def download_esmc_weights():
     logger.info(f"Downloading ESMC weights: {ESMC_600M_WEIGHTS_REPO}")
     snapshot_download(repo_id=ESMC_600M_WEIGHTS_REPO, cache_dir=VOLUME_ESMC_CACHE)
     volume.commit()
-    logger.info(f"ESMC weights ready at {VOLUME_ESMC_CACHE}")
+    logger.info(f"ESMC weights ready on Modal at {VOLUME_ESMC_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -118,7 +118,7 @@ def download_esmfold2_weights():
         logger.info(f"Downloading ESMFold2 weights: {repo}")
         snapshot_download(repo_id=repo, cache_dir=VOLUME_ESMFOLD2_CACHE)
     volume.commit()
-    logger.info(f"ESMFold2 weights ready at {VOLUME_ESMFOLD2_CACHE}")
+    logger.info(f"ESMFold2 weights ready on Modal at {VOLUME_ESMFOLD2_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -138,7 +138,7 @@ def download_esm3_weights():
     logger.info(f"Downloading ESM3 weights: {ESM3_WEIGHTS_REPO}")
     snapshot_download(repo_id=ESM3_WEIGHTS_REPO, cache_dir=VOLUME_ESM3_CACHE)
     volume.commit()
-    logger.info(f"ESM3 weights ready at {VOLUME_ESM3_CACHE}")
+    logger.info(f"ESM3 weights ready on Modal at {VOLUME_ESM3_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
@@ -174,7 +174,7 @@ def download_chai_weights():
             shutil.copyfileobj(response, f)
         tmp.rename(dest)
     volume.commit()
-    logger.info(f"Chai-1 weights ready at {VOLUME_CHAI_CACHE}")
+    logger.info(f"Chai-1 weights ready on Modal at {VOLUME_CHAI_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -190,7 +190,7 @@ def download_boltzgen_weights():
     snapshot_download(repo_id=BOLTZGEN_MODEL_REPO, cache_dir=VOLUME_BOLTZGEN_CACHE)
     snapshot_download(repo_id=BOLTZGEN_DATA_REPO, repo_type="dataset", cache_dir=VOLUME_BOLTZGEN_CACHE)
     volume.commit()
-    logger.info(f"BoltzGen weights ready at {VOLUME_BOLTZGEN_CACHE}")
+    logger.info(f"BoltzGen weights ready on Modal at {VOLUME_BOLTZGEN_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
@@ -214,7 +214,7 @@ def download_proteinmpnn_weights():
         logger.info(f"Downloading ProteinMPNN weights: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
-    logger.info(f"ProteinMPNN weights ready at {VOLUME_PROTEINMPNN_CACHE}")
+    logger.info(f"ProteinMPNN weights ready on Modal at {VOLUME_PROTEINMPNN_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
@@ -234,7 +234,7 @@ def download_ligandmpnn_weights():
         logger.info(f"Downloading LigandMPNN weights: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
-    logger.info(f"LigandMPNN weights ready at {VOLUME_LIGANDMPNN_CACHE}")
+    logger.info(f"LigandMPNN weights ready on Modal at {VOLUME_LIGANDMPNN_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_20)
@@ -254,7 +254,7 @@ def download_solublempnn_weights():
         logger.info(f"Downloading SolubleMPNN weights: {filename}")
         urllib.request.urlretrieve(f"{PROTEINMPNN_WEIGHTS_URL}/{filename}", cache_path / filename)
     volume.commit()
-    logger.info(f"SolubleMPNN weights ready at {VOLUME_SOLUBLEMPNN_CACHE}")
+    logger.info(f"SolubleMPNN weights ready on Modal at {VOLUME_SOLUBLEMPNN_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
@@ -280,7 +280,7 @@ def download_bindcraft_weights():
     if not (params_path / BINDCRAFT_AF2_PARAMS_MARKER).exists():
         raise RuntimeError(f"AlphaFold2 params missing {BINDCRAFT_AF2_PARAMS_MARKER} after extraction")
     volume.commit()
-    logger.info(f"BindCraft weights ready at {BINDCRAFT_AF2_PARAMS_DIR}")
+    logger.info(f"BindCraft weights ready on Modal at {BINDCRAFT_AF2_PARAMS_DIR}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -300,7 +300,7 @@ def download_vesm_weights():
         logger.info(f"Downloading VESM weights: {model_name}.pth")
         hf_hub_download(repo_id=VESM_WEIGHTS_REPO, filename=f"{model_name}.pth", cache_dir=VOLUME_VESM_CACHE)
     volume.commit()
-    logger.info(f"VESM weights ready at {VOLUME_VESM_CACHE}")
+    logger.info(f"VESM weights ready on Modal at {VOLUME_VESM_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
@@ -320,17 +320,12 @@ def download_intellifold_weights():
         logger.info(f"Downloading IntelliFold weights: {filename}")
         hf_hub_download(repo_id=INTELLIFOLD_WEIGHTS_REPO, filename=filename, local_dir=VOLUME_INTELLIFOLD_CACHE)
     volume.commit()
-    logger.info(f"IntelliFold weights ready at {VOLUME_INTELLIFOLD_CACHE}")
+    logger.info(f"IntelliFold weights ready on Modal at {VOLUME_INTELLIFOLD_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
 def download_protenix_weights():
-    """Pre-stage Protenix checkpoints and the CCD and cluster caches from the ByteDance TOS bucket.
-
-    Protenix reads everything under PROTENIX_ROOT_DIR, checkpoints from checkpoint/ and the
-    shared caches from common/, and downloads whatever is missing on the first run. Staging
-    them to the volume at those exact paths lets the service run without any download.
-    """
+    """Pre-stage Protenix checkpoints and the CCD and cluster caches from the ByteDance TOS bucket."""
     import urllib.request
 
     volume.reload()
@@ -352,27 +347,26 @@ def download_protenix_weights():
         logger.info(f"Downloading Protenix weights: {url}")
         urllib.request.urlretrieve(url, dest)
     volume.commit()
-    logger.info(f"Protenix weights ready at {VOLUME_PROTENIX_CACHE}")
+    logger.info(f"Protenix weights ready on Modal at {VOLUME_PROTENIX_CACHE}")
 
 
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
 def download_immunebuilder_weights():
-    """Pre-stage ImmuneBuilder weights straight from the Zenodo records the package points at."""
+    """Pre-stage ImmuneBuilder weights."""
     import urllib.request
 
     volume.reload()
     cache_path = Path(VOLUME_IMMUNEBUILDER_CACHE)
     cache_path.mkdir(parents=True, exist_ok=True)
-    missing = [(name, record) for name, record in IMMUNEBUILDER_WEIGHTS if not (cache_path / name).exists()]
+    missing = [name for name in IMMUNEBUILDER_WEIGHTS if not (cache_path / name).exists()]
     if not missing:
         logger.info("ImmuneBuilder weights already on the volume. Skipping download.")
         return
-    for name, record in missing:
-        url = f"{IMMUNEBUILDER_ZENODO_BASE}/{record}/files/{name}?download=1"
-        logger.info(f"Downloading ImmuneBuilder weights: {url}")
-        urllib.request.urlretrieve(url, cache_path / name)
+    for name in missing:
+        logger.info(f"Downloading ImmuneBuilder weights: {name}")
+        urllib.request.urlretrieve(f"{IMMUNEBUILDER_WEIGHTS_URL}/{name}", cache_path / name)
     volume.commit()
-    logger.info(f"ImmuneBuilder weights ready at {VOLUME_IMMUNEBUILDER_CACHE}")
+    logger.info(f"ImmuneBuilder weights ready on Modal at {VOLUME_IMMUNEBUILDER_CACHE}")
 
 
 def upload_mocks():
