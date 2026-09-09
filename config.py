@@ -1,7 +1,6 @@
 import functools
 import tomllib
 from dataclasses import dataclass, replace
-from pathlib import Path
 
 from constants import (
     FOLDWAYS_TOML_CONFIG_FILENAME,
@@ -96,10 +95,13 @@ SERVICE_REGISTRY: dict[str, RegistryEntry] = {
 def load_foldways_toml_config() -> dict:
     """Parse the config file once. An absent file reads as empty, meaning all
     defaults. The mounted copy is tried first, then the repository root."""
-    for path in (Path(FOLDWAYS_TOML_CONFIG_REMOTE_PATH), Path(FOLDWAYS_TOML_CONFIG_FILENAME)):
-        if path.exists():
+    paths = (FOLDWAYS_TOML_CONFIG_REMOTE_PATH, FOLDWAYS_TOML_CONFIG_FILENAME)
+    for path in paths:
+        try:
             with open(path, "rb") as f:
                 return tomllib.load(f)
+        except OSError:
+            continue
     return {}
 
 
