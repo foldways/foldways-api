@@ -47,7 +47,20 @@ def main(service: str, url: str) -> None:
         while True:
             if time.monotonic() > deadline:
                 sys.exit(f"Job {job_id} did not finish within {JOB_TIMEOUT_SECONDS}s")
-            status = client.get(f"/jobs/{job_id}").raise_for_status().json()["status"]
+            try:
+                response = client.get(f"/jobs/{job_id}")
+                response.raise_for_status()
+            except httpx2.HTTPStatusError as e:
+                if e.response.status_code < 500:
+                    raise
+                print(f"Transient {e.response.status_code} polling job {job_id}, retrying")
+                time.sleep(POLL_INTERVAL_SECONDS)
+                continue
+            except httpx2.RequestError as e:
+                print(f"Transient network error polling job {job_id} ({e}), retrying")
+                time.sleep(POLL_INTERVAL_SECONDS)
+                continue
+            status = response.json()["status"]
             if status == JobState.COMPLETE:
                 break
             if status != JobState.PENDING:
@@ -61,8 +74,6 @@ def main(service: str, url: str) -> None:
     output_dir.mkdir(parents=True)
     zipfile.ZipFile(io.BytesIO(archive)).extractall(output_dir)
 
-    # Without the marker a mock job never reads as complete, so the fixture would
-    # be staged but unusable.
     if not (output_dir / JOB_COMPLETE_MARKER).exists():
         sys.exit(f"Recorded output has no {JOB_COMPLETE_MARKER}, so the fixture would not work.")
 
