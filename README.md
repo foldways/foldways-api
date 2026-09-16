@@ -115,6 +115,7 @@ Pass the name as `service` in a job or batch request, or as the path in
 | BioPhi          | [Merck/BioPhi](https://github.com/Merck/BioPhi)                             | Sequence design      |
 | Humatch         | [oxpig/Humatch](https://github.com/oxpig/Humatch)                           | Sequence design      |
 | HyperMPNN       | [meilerlab/HyperMPNN](https://github.com/meilerlab/HyperMPNN)               | Sequence design      |
+| Lacuna          | [mooreneural/lacuna](https://github.com/mooreneural/lacuna)                 | Pocket detection     |
 
 ## Requirements
 
