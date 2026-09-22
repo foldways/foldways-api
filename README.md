@@ -88,6 +88,7 @@ Pass the name as `service` in a job or batch request, or as the path in
 | IntelliFold   | `intellifold`   | [IntelliGen-AI/IntelliFold](https://github.com/IntelliGen-AI/IntelliFold) | Structure prediction |
 | Protenix      | `protenix`      | [bytedance/Protenix](https://github.com/bytedance/Protenix)               | Structure prediction |
 | BindCraft     | `bindcraft`     | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)       | De novo design       |
+| BindCraft2    | `bindcraft2`    | [PacesaLab/BindCraft2](https://github.com/PacesaLab/BindCraft2)           | De novo design       |
 | BoltzGen      | `boltzgen`      | [HannesStark/boltzgen](https://github.com/HannesStark/boltzgen)           | De novo design       |
 | ESM3          | `esm3`          | [Biohub/esm](https://github.com/Biohub/esm)                               | De novo design       |
 | ThermoMPNN    | `thermompnn`    | [Kuhlman-Lab/ThermoMPNN](https://github.com/Kuhlman-Lab/ThermoMPNN)       | Scoring              |

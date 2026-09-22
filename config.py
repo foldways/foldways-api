@@ -68,6 +68,11 @@ SERVICE_REGISTRY: dict[str, RegistryEntry] = {
     "bindcraft": RegistryEntry(
         "services.bindcraft", "BindCraftParams", "BindCraft de novo binder design against a target structure."
     ),
+    "bindcraft2": RegistryEntry(
+        "services.bindcraft2",
+        "BindCraft2Params",
+        "BindCraft2 (BC2) de novo binder design across miniproteins, antibodies, and peptides.",
+    ),
     "vesm": RegistryEntry(
         "services.vesm",
         "VESMParams",
@@ -142,6 +147,7 @@ SERVICE_DEFAULTS: dict[str, ServiceCompute] = {
     "thermompnn": ServiceCompute(GPU_L4, MINUTES_10),
     "chai": ServiceCompute(GPU_H100, MINUTES_30),
     "bindcraft": ServiceCompute(GPU_H100, HOURS_6),
+    "bindcraft2": ServiceCompute(GPU_H100, HOURS_6),
     "vesm": ServiceCompute(GPU_L4, MINUTES_10),
     "intellifold": ServiceCompute(GPU_H100, MINUTES_30),
     "immunebuilder": ServiceCompute(GPU_T4, MINUTES_15),
@@ -211,6 +217,11 @@ BINDCRAFT_GPU = get_service_compute("bindcraft").gpu
 BINDCRAFT_TIMEOUT = get_service_compute("bindcraft").timeout
 BINDCRAFT_MAX_CONTAINERS = get_service_compute("bindcraft").max_containers
 BINDCRAFT_SCALEDOWN_WINDOW = get_service_compute("bindcraft").scaledown_window
+
+BINDCRAFT2_GPU = get_service_compute("bindcraft2").gpu
+BINDCRAFT2_TIMEOUT = get_service_compute("bindcraft2").timeout
+BINDCRAFT2_MAX_CONTAINERS = get_service_compute("bindcraft2").max_containers
+BINDCRAFT2_SCALEDOWN_WINDOW = get_service_compute("bindcraft2").scaledown_window
 
 VESM_GPU = get_service_compute("vesm").gpu
 VESM_TIMEOUT = get_service_compute("vesm").timeout

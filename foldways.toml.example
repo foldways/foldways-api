@@ -13,6 +13,7 @@ enabled = [
     "thermompnn",
     "chai",
     "bindcraft",
+    "bindcraft2",
     "vesm",
     "intellifold",
     "immunebuilder",
@@ -80,6 +81,12 @@ max_containers = 5
 scaledown_window = 60
 
 [services.bindcraft]
+gpu = "H100"
+timeout = 21600
+max_containers = 5
+scaledown_window = 60
+
+[services.bindcraft2]
 gpu = "H100"
 timeout = 21600
 max_containers = 5
