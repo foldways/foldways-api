@@ -5,6 +5,9 @@ import modal
 
 from config import get_enabled_services
 from constants import (
+    BINDCRAFT2_AF2_PARAMS_DIR,
+    BINDCRAFT2_AF2_PARAMS_MARKER,
+    BINDCRAFT2_AF2_WEIGHTS_URL,
     BINDCRAFT_AF2_PARAMS_DIR,
     BINDCRAFT_AF2_PARAMS_MARKER,
     BINDCRAFT_AF2_WEIGHTS_URL,
@@ -283,6 +286,32 @@ def download_bindcraft_weights():
     logger.info(f"BindCraft weights ready on Modal at {BINDCRAFT_AF2_PARAMS_DIR}")
 
 
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_60)
+def download_bindcraft2_weights():
+    """Pre-stage the AlphaFold2 parameters BindCraft2 designs against."""
+    import tarfile
+    import tempfile
+    import urllib.request
+
+    volume.reload()
+    params_path = Path(BINDCRAFT2_AF2_PARAMS_DIR)
+    if (params_path / BINDCRAFT2_AF2_PARAMS_MARKER).exists():
+        logger.info("BindCraft2 weights already on the volume. Skipping download.")
+        return
+    params_path.mkdir(parents=True, exist_ok=True)
+    logger.info(f"Downloading BindCraft2 weights: {BINDCRAFT2_AF2_WEIGHTS_URL}")
+    with tempfile.TemporaryDirectory() as tmpdir:
+        archive_path = Path(tmpdir) / "alphafold_params.tar"
+        urllib.request.urlretrieve(BINDCRAFT2_AF2_WEIGHTS_URL, archive_path)
+        logger.info(f"Extracting BindCraft2 weights to {BINDCRAFT2_AF2_PARAMS_DIR}")
+        with tarfile.open(archive_path) as tar:
+            tar.extractall(params_path, filter="data")
+    if not (params_path / BINDCRAFT2_AF2_PARAMS_MARKER).exists():
+        raise RuntimeError(f"AlphaFold2 params missing {BINDCRAFT2_AF2_PARAMS_MARKER} after extraction")
+    volume.commit()
+    logger.info(f"BindCraft2 weights ready on Modal at {BINDCRAFT2_AF2_PARAMS_DIR}")
+
+
 @app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
 def download_vesm_weights():
     """Pre-stage the base ESM2 models and the distilled VESM checkpoints."""
@@ -388,6 +417,7 @@ DOWNLOADERS = {
     "ligandmpnn": download_ligandmpnn_weights,
     "solublempnn": download_solublempnn_weights,
     "bindcraft": download_bindcraft_weights,
+    "bindcraft2": download_bindcraft2_weights,
     "vesm": download_vesm_weights,
     "intellifold": download_intellifold_weights,
     "immunebuilder": download_immunebuilder_weights,
