@@ -93,6 +93,11 @@ SERVICE_REGISTRY: dict[str, RegistryEntry] = {
         "ProtenixParams",
         "Protenix all-atom structure prediction for proteins, ligands, nucleic acids, and ions.",
     ),
+    "bioemu2": RegistryEntry(
+        "services.bioemu2",
+        "BioEmu2Params",
+        "BioEmu2 structure prediction, equilibrium ensemble sampling, and propagation in time.",
+    ),
 }
 
 
@@ -152,6 +157,7 @@ SERVICE_DEFAULTS: dict[str, ServiceCompute] = {
     "intellifold": ServiceCompute(GPU_H100, MINUTES_30),
     "immunebuilder": ServiceCompute(GPU_T4, MINUTES_15),
     "protenix": ServiceCompute(GPU_H100, MINUTES_30),
+    "bioemu2": ServiceCompute(GPU_H100, MINUTES_30),
 }
 
 
@@ -242,3 +248,8 @@ PROTENIX_GPU = get_service_compute("protenix").gpu
 PROTENIX_TIMEOUT = get_service_compute("protenix").timeout
 PROTENIX_MAX_CONTAINERS = get_service_compute("protenix").max_containers
 PROTENIX_SCALEDOWN_WINDOW = get_service_compute("protenix").scaledown_window
+
+BIOEMU2_GPU = get_service_compute("bioemu2").gpu
+BIOEMU2_TIMEOUT = get_service_compute("bioemu2").timeout
+BIOEMU2_MAX_CONTAINERS = get_service_compute("bioemu2").max_containers
+BIOEMU2_SCALEDOWN_WINDOW = get_service_compute("bioemu2").scaledown_window
