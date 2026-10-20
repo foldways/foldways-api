@@ -67,10 +67,11 @@ that produced them and stay available after the GPU has scaled down.
 Each service publishes its parameter schema at `GET /services/{name}`, and the
 whole API is browsable as interactive API docs after deployment to Modal.
 
-Boltz-2 and Chai use multiple sequence alignments (MSAs). Foldways API builds
-them with the [ColabFold MSA server](https://github.com/sokrypton/ColabFold), so
-each protein sequence you submit is sent to that third-party service. This is
-done to avoid storing large MSA files in the Modal volume.
+Boltz-2, Chai, and BioEmu2 use multiple sequence alignments (MSAs). Foldways
+API builds them with the
+[ColabFold MSA server](https://github.com/sokrypton/ColabFold), so each protein
+sequence you submit is sent to that third-party service. This is done to avoid
+storing large MSA files in the Modal volume.
 
 ## Services
 
@@ -87,6 +88,7 @@ Pass the name as `service` in a job or batch request, or as the path in
 | ImmuneBuilder | `immunebuilder` | [oxpig/ImmuneBuilder](https://github.com/oxpig/ImmuneBuilder)             | Structure prediction |
 | IntelliFold   | `intellifold`   | [IntelliGen-AI/IntelliFold](https://github.com/IntelliGen-AI/IntelliFold) | Structure prediction |
 | Protenix      | `protenix`      | [bytedance/Protenix](https://github.com/bytedance/Protenix)               | Structure prediction |
+| BioEmu2       | `bioemu2`       | [microsoft/bioemu2](https://github.com/microsoft/bioemu2)                 | Ensemble sampling    |
 | BindCraft     | `bindcraft`     | [martinpacesa/BindCraft](https://github.com/martinpacesa/BindCraft)       | De novo design       |
 | BindCraft2    | `bindcraft2`    | [PacesaLab/BindCraft2](https://github.com/PacesaLab/BindCraft2)           | De novo design       |
 | BoltzGen      | `boltzgen`      | [HannesStark/boltzgen](https://github.com/HannesStark/boltzgen)           | De novo design       |

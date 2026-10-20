@@ -11,6 +11,9 @@ from constants import (
     BINDCRAFT_AF2_PARAMS_DIR,
     BINDCRAFT_AF2_PARAMS_MARKER,
     BINDCRAFT_AF2_WEIGHTS_URL,
+    BIOEMU2_CHECKPOINT,
+    BIOEMU2_CHECKPOINT_FILES,
+    BIOEMU2_WEIGHTS_REPO,
     BOLTZ2_WEIGHTS_REPO,
     BOLTZ2_WEIGHTS_REVISION,
     BOLTZGEN_DATA_REPO,
@@ -44,6 +47,7 @@ from constants import (
     SOLUBLEMPNN_CHECKPOINTS,
     VESM_MODELS,
     VESM_WEIGHTS_REPO,
+    VOLUME_BIOEMU2_CACHE,
     VOLUME_BOLTZ2_CACHE,
     VOLUME_BOLTZGEN_CACHE,
     VOLUME_CHAI_CACHE,
@@ -398,6 +402,32 @@ def download_immunebuilder_weights():
     logger.info(f"ImmuneBuilder weights ready on Modal at {VOLUME_IMMUNEBUILDER_CACHE}")
 
 
+@app.function(image=download_image, volumes={VOLUME_ROOT: volume}, timeout=MINUTES_30)
+def download_bioemu2_weights():
+    """Pre-stage the BioEmu2 checkpoint and its config.
+
+    bioemu2 looks for the named checkpoint in its Hugging Face cache before
+    contacting the Hub, so staging these two files into that cache lets the
+    service run without any download.
+    """
+    from huggingface_hub import hf_hub_download  # pyright: ignore[reportMissingImports]
+
+    volume.reload()
+    cache_path = Path(VOLUME_BIOEMU2_CACHE)
+    if cache_path.exists() and any(cache_path.iterdir()):
+        logger.info("BioEmu2 weights already on the volume. Skipping download.")
+        return
+    for filename in BIOEMU2_CHECKPOINT_FILES:
+        logger.info(f"Downloading BioEmu2 weights: {BIOEMU2_CHECKPOINT}/{filename}")
+        hf_hub_download(
+            repo_id=BIOEMU2_WEIGHTS_REPO,
+            filename=f"checkpoints/{BIOEMU2_CHECKPOINT}/{filename}",
+            cache_dir=VOLUME_BIOEMU2_CACHE,
+        )
+    volume.commit()
+    logger.info(f"BioEmu2 weights ready on Modal at {VOLUME_BIOEMU2_CACHE}")
+
+
 def upload_mocks():
     """Copy the local mock fixtures onto the volume for mock job submissions."""
     logger.info("Uploading mock fixtures...")
@@ -422,6 +452,7 @@ DOWNLOADERS = {
     "intellifold": download_intellifold_weights,
     "immunebuilder": download_immunebuilder_weights,
     "protenix": download_protenix_weights,
+    "bioemu2": download_bioemu2_weights,
 }
 
 

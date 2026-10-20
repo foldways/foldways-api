@@ -1,0 +1,1 @@
+/usr/local/bin/bioemu2 propagate --system /tmp/tmppzzznr9r/system.yaml --x0-cif /tmp/tmppzzznr9r/start.cif --lag-time-ns 100.0 --out /tmp/tmppzzznr9r/output --checkpoint bioemu2-preview --checkpoint-cache-dir /data/bioemu2_cache --num-samples 8 --sampler edm --physicality-filter high_quality --seed 0

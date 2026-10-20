@@ -18,6 +18,7 @@ enabled = [
     "intellifold",
     "immunebuilder",
     "protenix",
+    "bioemu2",
 ]
 
 [services.boltz2]
@@ -111,6 +112,12 @@ max_containers = 5
 scaledown_window = 60
 
 [services.protenix]
+gpu = "H100"
+timeout = 1800
+max_containers = 5
+scaledown_window = 60
+
+[services.bioemu2]
 gpu = "H100"
 timeout = 1800
 max_containers = 5
