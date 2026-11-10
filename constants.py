@@ -1,5 +1,5 @@
 APP_NAME = "foldways"
-API_VERSION = "0.14.0"
+API_VERSION = "0.20.0"
 ROUTE_PREFIX = ""
 LOCAL_MOCKS_DIR = "mocks"
 MOCK_OUTPUT_DIR = "output"
