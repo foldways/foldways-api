@@ -65,7 +65,8 @@ tools. It is also used to store workload results, so they outlive the container
 that produced them and stay available after the GPU has scaled down.
 
 Each service publishes its parameter schema at `GET /services/{name}`, and the
-whole API is browsable as interactive API docs after deployment to Modal.
+whole API is documented at
+[foldways.github.io/foldways-api](https://foldways.github.io/foldways-api/).
 
 Boltz-2, Chai, and BioEmu2 use multiple sequence alignments (MSAs). Foldways API
 builds them with the
@@ -153,8 +154,8 @@ See [Usage](#usage) to find your API URL and submit your first job, or
 
 Modal displays the API URL in the [Modal dashboard](https://modal.com/apps),
 under the app's `api` function. The URL has the format
-`https://<workspace>--foldways-api.modal.run`. Interactive API docs are served
-at `/docs`.
+`https://<workspace>--foldways-api.modal.run`. API docs are published at
+[foldways.github.io/foldways-api](https://foldways.github.io/foldways-api/).
 
 The examples below read the URL from `FOLDWAYS_API_URL`, so export it into your
 shell first:
@@ -230,13 +231,13 @@ curl "$FOLDWAYS_API_URL/batches/<batch_id>"
 ```
 
 Every parameter each service accepts is listed at `GET /services/{name}`, or
-browsable at `/docs`.
+browsable in the [API docs](https://foldways.github.io/foldways-api/).
 
 ## Usage with an agent
 
 The API is self-describing, so an AI agent can drive it from your deployment URL
-alone. It serves its full contract at `/openapi.json`, the deployed services and
-their parameters at `/services`, and browsable docs at `/docs`.
+alone. It serves its full contract at `/openapi.json`, and the deployed services
+and their parameters at `/services`.
 
 To get an agent running jobs, give it your deployment URL and a prompt like:
 
@@ -253,15 +254,21 @@ Configuration is optional. Foldways API ships with sensible defaults for every
 service, so with no config file every service is deployed and pre-staged using
 those defaults.
 
-Configuration lives in one file, `foldways.toml`, and covers two things: which
-services are deployed, and each service's deployment settings (GPU type,
-timeout, max containers, and scaledown window). To customize, copy
-[`foldways.toml.example`](foldways.toml.example) to `foldways.toml` and edit
-what you need.
+Configuration lives in one file, `foldways.toml`, and covers three things:
+whether the API requires Modal proxy auth, which services are deployed, and each
+service's deployment settings (GPU type, timeout, max containers, and scaledown
+window). To customize, copy [`foldways.toml.example`](foldways.toml.example) to
+`foldways.toml` and edit what you need.
 
 The example lists every service under `[services].enabled`, so remove the ones
 you do not want. Only the listed services are built, downloaded, and served, and
 leaving the list empty includes all of them.
+
+The API is public by default, so anyone with its URL can submit jobs and
+download results. Set `require_modal_proxy_auth = true` under `[api]` to have
+Modal reject any request without a valid
+[proxy auth token](https://modal.com/docs/guide/webhook-proxy-auth). Create a
+token in your Modal workspace settings.
 
 These settings are read while `modal deploy` builds the app and while
 `make setup` stages weights, not while the app serves traffic, so they are baked
@@ -280,7 +287,7 @@ services/           Per-tool Modal functions and images
 mocks/              Fixture outputs served by mock job submissions
 scripts/            Developer scripts, run as modules from the repo root
 tests/              Pytest suite
-docs/               Generated OpenAPI schema (openapi.json)
+docs/               Generated OpenAPI schema (openapi.json) and its GitHub Pages viewer
 app.py              FastAPI app, exposed via modal.asgi_app
 core.py             Modal app, images, and volume
 setup_artifacts.py  Stages weights and mocks onto the volume

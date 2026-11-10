@@ -1,5 +1,8 @@
 # Copy this file to foldways.toml and edit it. See the README for instructions.
 
+[api]
+require_modal_proxy_auth = false
+
 [services]
 enabled = [
     "boltz2",

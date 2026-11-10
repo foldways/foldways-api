@@ -115,6 +115,12 @@ def load_foldways_toml_config() -> dict:
     return {}
 
 
+def get_modal_proxy_auth_setting() -> bool:
+    """Return whether the API requires Modal proxy auth. Off by default, so the
+    endpoint is public unless the file turns it on."""
+    return load_foldways_toml_config().get("api", {}).get("require_modal_proxy_auth", False)
+
+
 def get_enabled_services() -> list[str]:
     """Return the service names to include, in registry order."""
     names = list(SERVICE_REGISTRY)
