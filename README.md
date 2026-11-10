@@ -67,8 +67,8 @@ that produced them and stay available after the GPU has scaled down.
 Each service publishes its parameter schema at `GET /services/{name}`, and the
 whole API is browsable as interactive API docs after deployment to Modal.
 
-Boltz-2, Chai, and BioEmu2 use multiple sequence alignments (MSAs). Foldways
-API builds them with the
+Boltz-2, Chai, and BioEmu2 use multiple sequence alignments (MSAs). Foldways API
+builds them with the
 [ColabFold MSA server](https://github.com/sokrypton/ColabFold), so each protein
 sequence you submit is sent to that third-party service. This is done to avoid
 storing large MSA files in the Modal volume.
@@ -102,23 +102,24 @@ Pass the name as `service` in a job or batch request, or as the path in
 
 ### Planned
 
-| Service         | Codebase                                                                    | Type                 |
-| --------------- | --------------------------------------------------------------------------- | -------------------- |
-| OpenDDE         | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)         | Structure prediction |
-| Aggrescan3D     | [lcbio/aggrescan3d](https://bitbucket.org/lcbio/aggrescan3d/src/master/)    | Scoring              |
-| DeepImmuno      | [frankligy/DeepImmuno](https://github.com/frankligy/DeepImmuno)             | Scoring              |
-| DeepViscosity   | [Lailabcode/DeepViscosity](https://github.com/Lailabcode/DeepViscosity)     | Scoring              |
-| ESM-Scan        | [xuebingwu/ESM-Scan](https://github.com/xuebingwu/ESM-Scan)                 | Scoring              |
-| NetSolP         | [teevee112/NetSolP-1.0](https://github.com/teevee112/NetSolP-1.0)           | Scoring              |
-| ProteinMPNN-ddg | [PeptoneLtd/proteinmpnn_ddg](https://github.com/PeptoneLtd/proteinmpnn_ddg) | Scoring              |
-| TemStaPro       | [ievapudz/TemStaPro](https://github.com/ievapudz/TemStaPro)                 | Scoring              |
-| ThermoMPNN-D    | [Kuhlman-Lab/ThermoMPNN-D](https://github.com/Kuhlman-Lab/ThermoMPNN-D)     | Scoring              |
-| AntiBMPNN       | [zeysun/AntiBMPNN](https://github.com/zeysun/AntiBMPNN)                     | Sequence design      |
-| AntiFold        | [oxpig/AntiFold](https://github.com/oxpig/AntiFold)                         | Sequence design      |
-| BioPhi          | [Merck/BioPhi](https://github.com/Merck/BioPhi)                             | Sequence design      |
-| Humatch         | [oxpig/Humatch](https://github.com/oxpig/Humatch)                           | Sequence design      |
-| HyperMPNN       | [meilerlab/HyperMPNN](https://github.com/meilerlab/HyperMPNN)               | Sequence design      |
-| Lacuna          | [mooreneural/lacuna](https://github.com/mooreneural/lacuna)                 | Pocket detection     |
+| Service         | Codebase                                                                                      | Type                 |
+| --------------- | --------------------------------------------------------------------------------------------- | -------------------- |
+| OpenDDE         | [aurekaresearch/OpenDDE](https://github.com/aurekaresearch/OpenDDE)                           | Structure prediction |
+| Aggrescan3D     | [lcbio/aggrescan3d](https://bitbucket.org/lcbio/aggrescan3d/src/master/)                      | Scoring              |
+| DeepImmuno      | [frankligy/DeepImmuno](https://github.com/frankligy/DeepImmuno)                               | Scoring              |
+| DeepViscosity   | [Lailabcode/DeepViscosity](https://github.com/Lailabcode/DeepViscosity)                       | Scoring              |
+| ESM-Scan        | [xuebingwu/ESM-Scan](https://github.com/xuebingwu/ESM-Scan)                                   | Scoring              |
+| NetSolP         | [teevee112/NetSolP-1.0](https://github.com/teevee112/NetSolP-1.0)                             | Scoring              |
+| ProteinMPNN-ddg | [PeptoneLtd/proteinmpnn_ddg](https://github.com/PeptoneLtd/proteinmpnn_ddg)                   | Scoring              |
+| TemStaPro       | [ievapudz/TemStaPro](https://github.com/ievapudz/TemStaPro)                                   | Scoring              |
+| ThermoMPNN-D    | [Kuhlman-Lab/ThermoMPNN-D](https://github.com/Kuhlman-Lab/ThermoMPNN-D)                       | Scoring              |
+| AntiBMPNN       | [zeysun/AntiBMPNN](https://github.com/zeysun/AntiBMPNN)                                       | Sequence design      |
+| AntiFold        | [oxpig/AntiFold](https://github.com/oxpig/AntiFold)                                           | Sequence design      |
+| BioPhi          | [Merck/BioPhi](https://github.com/Merck/BioPhi)                                               | Sequence design      |
+| Humatch         | [oxpig/Humatch](https://github.com/oxpig/Humatch)                                             | Sequence design      |
+| HyperMPNN       | [meilerlab/HyperMPNN](https://github.com/meilerlab/HyperMPNN)                                 | Sequence design      |
+| Lacuna          | [mooreneural/lacuna](https://github.com/mooreneural/lacuna)                                   | Pocket detection     |
+| SO3LR           | [general-molecular-simulations/so3lr](https://github.com/general-molecular-simulations/so3lr) | Simulation           |
 
 ## Requirements
 
