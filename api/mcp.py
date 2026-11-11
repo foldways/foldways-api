@@ -2,7 +2,7 @@ from collections.abc import AsyncGenerator, Callable
 from contextlib import asynccontextmanager
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import APIRouter, FastAPI, HTTPException, Response
 from mcp.server import MCPServer
 from mcp.server.mcpserver import Context
 from mcp.server.mcpserver.exceptions import ToolError
@@ -183,3 +183,24 @@ async def run_mcp_session_manager(_: FastAPI) -> AsyncGenerator[None]:
     """Run the MCP session manager, which a mounted app does not start on its own."""
     async with mcp_server.session_manager.run():
         yield
+
+
+router = APIRouter()
+
+
+@router.get("/mcp", include_in_schema=False)
+def reject_mcp_get() -> Response:
+    """Refuse the server-to-client stream that MCP clients may open with GET.
+
+    MCP clients can send a GET to open a long-lived connection for messages the
+    server wants to push to them. This server runs in stateless mode, so it never
+    pushes anything. Without this route the SDK would still accept the GET and keep
+    the connection open, sending nothing. A client that sends the GET to check
+    whether the server is reachable would then wait until it gives up. This is the
+    likely cause of the "Couldn't check the server" warning in Claude's connector
+    setup.
+
+    Answering 405 Method Not Allowed tells the client right away that this server
+    does not offer the connection, which the MCP spec allows.
+    """
+    return Response(status_code=405, headers={"Allow": "POST"})

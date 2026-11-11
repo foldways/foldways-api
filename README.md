@@ -254,22 +254,23 @@ The API also serves an [MCP](https://modelcontextprotocol.io) server at `/mcp`,
 so chat apps and coding agents can list services, submit jobs and batches, check
 on them, and read results without hand-written requests.
 
-To add it to Claude Code:
+#### Claude
 
-```bash
-claude mcp add --transport http foldways "$FOLDWAYS_API_URL/mcp"
-```
+Add it as a custom connector in Claude on the web, desktop, or mobile:
 
-If the API requires Modal proxy auth, pass the token as headers:
+1. Go to **Customize** > **Connectors**.
+2. Select **Add**, then **Add custom connector**.
+3. Enter a name, such as Foldways, and the URL `<FOLDWAYS_API_URL>/mcp`.
+4. Choose **No sign in**, then select **Add**.
 
-```bash
-claude mcp add --transport http foldways "$FOLDWAYS_API_URL/mcp" \
-  --header "Modal-Key: $MODAL_KEY" --header "Modal-Secret: $MODAL_SECRET"
-```
+On Team and Enterprise plans, an owner adds the connector under **Organization
+settings** > **Connectors**, and members connect to it under **Customize** >
+**Connectors**.
 
-In Claude Desktop, add the `/mcp` URL as a custom connector. Custom connectors
-cannot send headers, so with Modal proxy auth on, add the server to
-`claude_desktop_config.json` instead, through
+If the API requires Modal proxy auth, add `Modal-Key` and `Modal-Secret` under
+**Request headers** in step 4. Request headers are in beta and available to only
+some organizations. Without them, add the server to Claude Desktop's
+`claude_desktop_config.json` through
 [`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
 
 ```json
@@ -289,6 +290,32 @@ cannot send headers, so with Modal proxy auth on, add the server to
     }
   }
 }
+```
+
+#### ChatGPT
+
+1. Go to [ChatGPT Plugins](https://chatgpt.com/plugins).
+2. Select the plus button, then **Add custom MCP server**.
+3. Enter a name, such as Foldways, and a description.
+4. Under **Connection**, enter `<FOLDWAYS_API_URL>/mcp`.
+5. Set authentication to none, review the warning, and select **I understand and
+   want to continue**.
+6. Select **Create as a plugin**.
+
+In a ChatGPT Business or Enterprise workspace, an admin may need to allow custom
+MCP servers first.
+
+#### Claude Code
+
+```bash
+claude mcp add --transport http foldways "$FOLDWAYS_API_URL/mcp"
+```
+
+If the API requires Modal proxy auth, pass the token as headers:
+
+```bash
+claude mcp add --transport http foldways "$FOLDWAYS_API_URL/mcp" \
+  --header "Modal-Key: $MODAL_KEY" --header "Modal-Secret: $MODAL_SECRET"
 ```
 
 ## Configuration

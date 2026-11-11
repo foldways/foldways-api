@@ -5,6 +5,7 @@ from api.batches import router as batches_router
 from api.health import router as health_router
 from api.jobs import router as jobs_router
 from api.mcp import mcp_app, run_mcp_session_manager
+from api.mcp import router as mcp_router
 from api.services import router as services_router
 from config import get_modal_proxy_auth_setting
 from constants import API_VERSION, ROUTE_PREFIX, VOLUME_ROOT
@@ -23,6 +24,7 @@ web_app.include_router(health_router, prefix=ROUTE_PREFIX)
 web_app.include_router(services_router, prefix=ROUTE_PREFIX)
 web_app.include_router(jobs_router, prefix=ROUTE_PREFIX)
 web_app.include_router(batches_router, prefix=ROUTE_PREFIX)
+web_app.include_router(mcp_router, prefix=ROUTE_PREFIX)
 web_app.mount(ROUTE_PREFIX or "/", mcp_app)  # last, since it matches every path
 
 
