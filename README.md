@@ -252,9 +252,7 @@ To get an agent running jobs, give it your deployment URL and a prompt like:
 
 The API also serves an [MCP](https://modelcontextprotocol.io) server at `/mcp`,
 so chat apps and coding agents can list services, submit jobs and batches, check
-on them, and read results without hand-written requests. It exposes every API
-action, plus `list_job_files` and `read_job_file` for reviewing a completed
-job's outputs in the chat.
+on them, and read results without hand-written requests.
 
 To add it to Claude Code:
 
@@ -292,9 +290,6 @@ cannot send headers, so with Modal proxy auth on, add the server to
   }
 }
 ```
-
-With Modal proxy auth on, download links open only in tools that send the
-headers, not in a browser. `list_job_files` returns a `curl` command that does.
 
 ## Configuration
 
