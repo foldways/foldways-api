@@ -10,6 +10,7 @@ dependencies = [
     "modal>=1.5.2,<2.0.0",
     "fastapi>=0.139.2,<0.140.0",
     "pydantic>=2.13.4,<3.0.0",
+    "mcp>=2.3.0,<3.0.0",
 ]
 
 [project.optional-dependencies]
