@@ -29,6 +29,18 @@ class JobDeleteResponse(BaseModel):
     deleted: str  # id of the deleted job
 
 
+class JobFile(BaseModel):
+    path: str  # relative to the job's output directory
+    size_bytes: int
+
+
+class JobFiles(BaseModel):
+    job_id: str
+    files: list[JobFile]
+    download_url: str  # zip of every file
+    download_command: str  # curl command that saves the zip
+
+
 class BatchRequest(BaseModel):
     service: str
     params: list[dict]  # one param set per job, all run the same service
@@ -57,6 +69,11 @@ class BatchStopResponse(BaseModel):
 class BatchDeleteResponse(BaseModel):
     deleted: str  # the batch id
     jobs: list[str]  # ids of the jobs that were deleted
+
+
+class ServiceSummary(BaseModel):
+    name: str
+    description: str
 
 
 class ServiceInfo(BaseModel):

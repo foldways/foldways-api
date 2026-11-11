@@ -248,6 +248,54 @@ To get an agent running jobs, give it your deployment URL and a prompt like:
 > `GET /jobs/{id}/download`. Add `"mock": true` to a request to test the flow
 > without running on a GPU.
 
+### MCP server
+
+The API also serves an [MCP](https://modelcontextprotocol.io) server at `/mcp`,
+so chat apps and coding agents can list services, submit jobs and batches, check
+on them, and read results without hand-written requests. It exposes every API
+action, plus `list_job_files` and `read_job_file` for reviewing a completed
+job's outputs in the chat.
+
+To add it to Claude Code:
+
+```bash
+claude mcp add --transport http foldways "$FOLDWAYS_API_URL/mcp"
+```
+
+If the API requires Modal proxy auth, pass the token as headers:
+
+```bash
+claude mcp add --transport http foldways "$FOLDWAYS_API_URL/mcp" \
+  --header "Modal-Key: $MODAL_KEY" --header "Modal-Secret: $MODAL_SECRET"
+```
+
+In Claude Desktop, add the `/mcp` URL as a custom connector. Custom connectors
+cannot send headers, so with Modal proxy auth on, add the server to
+`claude_desktop_config.json` instead, through
+[`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
+
+```json
+{
+  "mcpServers": {
+    "foldways": {
+      "command": "npx",
+      "args": [
+        "mcp-remote",
+        "<FOLDWAYS_API_URL>/mcp",
+        "--header",
+        "Modal-Key:${MODAL_KEY}",
+        "--header",
+        "Modal-Secret:${MODAL_SECRET}"
+      ],
+      "env": { "MODAL_KEY": "<key>", "MODAL_SECRET": "<secret>" }
+    }
+  }
+}
+```
+
+With Modal proxy auth on, download links open only in tools that send the
+headers, not in a browser. `list_job_files` returns a `curl` command that does.
+
 ## Configuration
 
 Configuration is optional. Foldways API ships with sensible defaults for every
@@ -281,7 +329,7 @@ Issues and pull requests are welcome.
 ### Project layout
 
 ```
-api/                FastAPI routers and request/response schemas
+api/                FastAPI routers, request/response schemas, and the MCP server
 common/             Service registry, durable job/batch registries, shared helpers
 services/           Per-tool Modal functions and images
 mocks/              Fixture outputs served by mock job submissions

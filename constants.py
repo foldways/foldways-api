@@ -41,6 +41,18 @@ JOB_ERROR_MARKER = "error.log"
 # Image dependency pins
 FASTAPI_SPEC = "fastapi>=0.139.2,<0.140.0"
 PYDANTIC_SPEC = "pydantic>=2.13.4,<3.0.0"
+MCP_SPEC = "mcp>=2.3.0,<3.0.0"
+
+# MCP config
+MCP_MAX_READ_BYTES = 200_000
+MCP_SERVER_INSTRUCTIONS = """\
+Foldways runs protein engineering tools such as structure prediction, inverse folding, and binder design.
+Call list_services to see what is deployed, then get_service for the params a service takes.
+Submit with submit_job, or submit_batch to run one service over many param sets.
+Jobs run in the background and can take minutes to hours, so check on them with get_job or get_batch.
+Set mock to true to try a service without using a GPU.
+Once a job is complete, list_job_files shows its outputs and a download link, and read_job_file reads a text output.
+Stopping and deleting cannot be undone, so confirm with the user first."""
 
 # Modal function config
 MAX_CONTAINERS = 5

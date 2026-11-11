@@ -10,6 +10,7 @@ from constants import (
     FASTAPI_SPEC,
     FOLDWAYS_TOML_CONFIG_FILENAME,
     FOLDWAYS_TOML_CONFIG_REMOTE_PATH,
+    MCP_SPEC,
     PYDANTIC_SPEC,
     VOLUME_NAME,
 )
@@ -28,7 +29,7 @@ def configure_image(image: modal.Image) -> modal.Image:
 
 
 cpu_image = configure_image(
-    modal.Image.debian_slim().pip_install(FASTAPI_SPEC, PYDANTIC_SPEC).add_local_python_source(*API_SOURCES)
+    modal.Image.debian_slim().pip_install(FASTAPI_SPEC, PYDANTIC_SPEC, MCP_SPEC).add_local_python_source(*API_SOURCES)
 )
 
 volume = modal.Volume.from_name(VOLUME_NAME, create_if_missing=True)
