@@ -70,7 +70,8 @@ def get_service(name: str) -> ServiceInfo:
 def submit_job(service: str, params: dict, name: str | None = None, mock: bool = False) -> JobStatus:
     """Submit one job and return its id. Inline file contents such as FASTA or PDB text go in params.
 
-    Set mock to true to return a stored example result without using a GPU.
+    Only set mock when the user explicitly asks for a mock or test run. Mock results are stored
+    examples, not real predictions.
     """
     reload_volume()
     return call_route(jobs.submit_job, JobRequest(service=service, params=params, name=name, mock=mock))
@@ -108,7 +109,8 @@ def delete_job(job_id: str) -> JobDeleteResponse:
 def submit_batch(service: str, params: list[dict], name: str | None = None, mock: bool = False) -> BatchSubmitResponse:
     """Run one service over many param sets, one job per set, and return the batch id and job ids.
 
-    Set mock to true to return stored example results without using a GPU.
+    Only set mock when the user explicitly asks for a mock or test run. Mock results are stored
+    examples, not real predictions.
     """
     reload_volume()
     return call_route(batches.submit_batch, BatchRequest(service=service, params=params, name=name, mock=mock))
@@ -137,7 +139,11 @@ def delete_batch(batch_id: str) -> BatchDeleteResponse:
 
 @mcp_server.tool()
 def list_job_files(job_id: str, ctx: Context) -> JobFiles:
-    """List a completed job's output files, with a link and a curl command to download them all as a zip."""
+    """List a completed job's output files, with a link and a curl command to download them all as a zip.
+
+    The link opens in a browser only when Modal proxy auth is off. When it is on, the curl command
+    includes the auth headers and is the way to download.
+    """
     job_dir = get_complete_job_dir(job_id)
     files = [
         JobFile(path=str(path.relative_to(job_dir)), size_bytes=path.stat().st_size)

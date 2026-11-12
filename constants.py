@@ -50,8 +50,9 @@ Foldways runs protein engineering tools such as structure prediction, inverse fo
 Call list_services to see what is deployed, then get_service for the params a service takes.
 Submit with submit_job, or submit_batch to run one service over many param sets.
 Jobs run in the background and can take minutes to hours, so check on them with get_job or get_batch.
-Set mock to true to try a service without using a GPU.
-Once a job is complete, list_job_files shows its outputs and a download link, and read_job_file reads a text output.
+When a job is complete, call list_job_files and give the user its download_command, so they can download the
+results. Also give its download_url as a clickable link, unless the download_command has Modal auth headers,
+since the link then won't open in a browser. read_job_file reads one text output for review.
 Stopping and deleting cannot be undone, so confirm with the user first."""
 
 # Modal function config

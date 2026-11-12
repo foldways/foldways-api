@@ -235,11 +235,17 @@ browsable in the [API docs](https://foldways.github.io/foldways-api/).
 
 ## Usage with an agent
 
-The API is self-describing, so an AI agent can drive it from your deployment URL
-alone. It serves its full contract at `/openapi.json`, and the deployed services
-and their parameters at `/services`.
+Agents can use Foldways by calling the REST API directly, or through its MCP
+server.
 
-To get an agent running jobs, give it your deployment URL and a prompt like:
+### REST API
+
+Foldways API is a standard REST API and can be used by sending web requests to
+your Foldways API URL, as in the `curl` examples under [Usage](#usage). Any tool
+that can send web requests works, such as `curl` or a Python script.
+
+An AI agent that can send web requests, such as Claude Code, can also use the
+API for you. Give it your Foldways API URL and a prompt like:
 
 > The Foldways API is at `<FOLDWAYS_API_URL>`. Read
 > `<FOLDWAYS_API_URL>/openapi.json` for the contract and
@@ -261,36 +267,16 @@ Add it as a custom connector in Claude on the web, desktop, or mobile:
 1. Go to **Customize** > **Connectors**.
 2. Select **Add**, then **Add custom connector**.
 3. Enter a name, such as Foldways, and the URL `<FOLDWAYS_API_URL>/mcp`.
-4. Choose **No sign in**, then select **Add**.
+4. Choose **No sign-in**, then select **Add**.
 
 On Team and Enterprise plans, an owner adds the connector under **Organization
 settings** > **Connectors**, and members connect to it under **Customize** >
 **Connectors**.
 
-If the API requires Modal proxy auth, add `Modal-Key` and `Modal-Secret` under
-**Request headers** in step 4. Request headers are in beta and available to only
-some organizations. Without them, add the server to Claude Desktop's
-`claude_desktop_config.json` through
-[`mcp-remote`](https://www.npmjs.com/package/mcp-remote):
-
-```json
-{
-  "mcpServers": {
-    "foldways": {
-      "command": "npx",
-      "args": [
-        "mcp-remote",
-        "<FOLDWAYS_API_URL>/mcp",
-        "--header",
-        "Modal-Key:${MODAL_KEY}",
-        "--header",
-        "Modal-Secret:${MODAL_SECRET}"
-      ],
-      "env": { "MODAL_KEY": "<key>", "MODAL_SECRET": "<secret>" }
-    }
-  }
-}
-```
+If you turned on Modal proxy auth (`require_modal_proxy_auth = true` in
+`foldways.toml`, see [Configuration](#configuration)), the connector must send
+your proxy auth token. In step 4, select **Add header** under **Request
+headers**, and add `Modal-Key` and `Modal-Secret` with the token's values.
 
 #### ChatGPT
 
