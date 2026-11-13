@@ -39,7 +39,7 @@ logger = logging.getLogger(__name__)
 
 
 async def log_tool_call(ctx: ServerRequestContext[Any, Any], call_next: CallNext) -> HandlerResult:
-    """Log which tool each MCP call runs, since Modal's access log shows only POST /mcp."""
+    """Log which tool each MCP call runs."""
     if ctx.method == "tools/call" and ctx.params:
         logger.info(f"MCP tool={ctx.params.get('name')}")
     return await call_next(ctx)
