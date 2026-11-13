@@ -1,9 +1,12 @@
+import logging
 from collections.abc import AsyncGenerator, Callable
 from contextlib import asynccontextmanager
 from pathlib import Path
+from typing import Any
 
 from fastapi import APIRouter, FastAPI, HTTPException, Response
 from mcp.server import MCPServer
+from mcp.server.context import CallNext, HandlerResult, ServerRequestContext
 from mcp.server.mcpserver import Context
 from mcp.server.mcpserver.exceptions import ToolError
 from mcp.server.transport_security import TransportSecuritySettings
@@ -32,7 +35,22 @@ from common.utils import check_job_complete, get_job_status
 from config import get_modal_proxy_auth_setting
 from constants import API_VERSION, MCP_MAX_READ_BYTES, MCP_SERVER_INSTRUCTIONS, VOLUME_JOBS_DIR
 
-mcp_server = MCPServer(name="Foldways API", instructions=MCP_SERVER_INSTRUCTIONS, version=API_VERSION)
+logger = logging.getLogger(__name__)
+
+
+async def log_tool_call(ctx: ServerRequestContext[Any, Any], call_next: CallNext) -> HandlerResult:
+    """Log which tool each MCP call runs, since Modal's access log shows only POST /mcp."""
+    if ctx.method == "tools/call" and ctx.params:
+        logger.info(f"MCP tool={ctx.params.get('name')}")
+    return await call_next(ctx)
+
+
+mcp_server = MCPServer(
+    name="Foldways API",
+    instructions=MCP_SERVER_INSTRUCTIONS,
+    version=API_VERSION,
+    middleware=[log_tool_call],
+)
 
 
 def call_route[T](route: Callable[..., T], *args) -> T:
