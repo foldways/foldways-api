@@ -165,6 +165,13 @@ class BindCraft2Params(BaseModel):
     bigbang: bool = Field(
         default=False, description="Seed the gradient stages so a binder starts folded from the origin."
     )
+    save_design_trajectory: bool = Field(
+        default=True,
+        description=(
+            "Save the structure each trajectory folded, before redesign and filtering. On by default, since "
+            "a run that accepts no designs returns no structures at all without it."
+        ),
+    )
 
     def target_count(self) -> int:
         """Number of targets the request describes, whether shipped or inline."""
@@ -240,6 +247,7 @@ def build_settings(params: BindCraft2Params, tmpdir: Path, output_dir: Path) -> 
     for flag in PROPERTY_FLAGS:
         if getattr(params, flag):
             settings[flag] = True
+    settings["save_design_trajectory"] = params.save_design_trajectory
 
     settings_path = tmpdir / "campaign.json"
     settings_path.write_text(json.dumps(settings))
