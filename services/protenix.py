@@ -36,9 +36,6 @@ logger = logging.getLogger(__name__)
 
 
 protenix_image = (
-    # Protenix JIT-compiles a fused LayerNorm CUDA kernel on import, so the image needs nvcc from a
-    # CUDA devel base. CUDA_HOME and the arch list let the compile run, and the kernel is built once
-    # at image build so containers start warm and never fail the compile at run time.
     modal.Image.from_registry(PROTENIX_CUDA_IMAGE, add_python=PYTHON_3_11)
     .apt_install("build-essential")
     .pip_install(PROTENIX_SPEC, PYDANTIC_SPEC)
@@ -235,7 +232,10 @@ class ProtenixParams(BaseModel):
         "server, colabfold uses the public ColabFold MMseqs2 server.",
     )
     need_atom_confidence: bool = Field(
-        default=False, description="Also compute and write atom-level confidence scores."
+        default=False,
+        description="Also write the full confidence matrices, including PAE, PDE, and contact probabilities. "
+        "Off by default because they can reach hundreds of megabytes for a large complex. Per-atom "
+        "pLDDT is in the mmCIF B-factor column either way.",
     )
 
     @model_validator(mode="after")

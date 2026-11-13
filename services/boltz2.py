@@ -254,8 +254,14 @@ class Boltz2Params(BaseModel):
     use_potentials: bool = Field(
         default=False, description="Apply inference-time potentials for physical plausibility."
     )
-    write_full_pae: bool = Field(default=False, description="Save the full PAE matrix alongside the structures.")
-    write_full_pde: bool = Field(default=False, description="Save the full PDE matrix alongside the structures.")
+    write_full_pae: bool = Field(
+        default=True,
+        description="Save the full PAE matrix alongside the structures.",
+    )
+    write_full_pde: bool = Field(
+        default=True,
+        description="Save the full PDE matrix alongside the structures.",
+    )
     no_kernels: bool = Field(
         default=False,
         description="Disable trifast kernels for triangular updates, which older GPUs need.",
@@ -400,7 +406,7 @@ def run(job_id: str, job_name: str | None, params: dict) -> None:
         params: A Boltz2Params dump, revalidated here so the container never
             trusts the payload it was handed.
     """
-    import yaml
+    import yaml  # pyright: ignore[reportMissingModuleSource]
 
     logger.info(f"Starting boltz2 prediction: job={job_id}")
     started_at = datetime.now(UTC)

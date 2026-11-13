@@ -62,7 +62,9 @@ class ThermoMPNNParams(BaseModel):
 
     pdb: str = Field(description="Inline PDB content of the structure to run mutagenesis on.")
     chain: str = Field(
-        default="A", description="Chain in the PDB to run site-saturation mutagenesis on.", examples=["A"]
+        default="",
+        description="Chain in the PDB to run site-saturation mutagenesis on. Empty uses the first chain.",
+        examples=["A"],
     )
 
 

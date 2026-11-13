@@ -57,7 +57,7 @@ class ESMCParams(BaseModel):
         description="`embed` returns representations. `variant_scores` returns per-substitution scores.",
     )
     return_logits: bool = Field(
-        default=False,
+        default=True,
         description="In embed mode, also save the per-residue sequence logits next to the embeddings.",
     )
 
@@ -203,6 +203,7 @@ def run(job_id: str, job_name: str | None, params: dict) -> None:
                 "model": ESMC_600M_WEIGHTS_REPO,
                 "mode": job_params.mode,
                 "num_sequences": len(job_params.sequences),
+                "sequences": job_params.sequences,
                 "sequence_lengths": [len(sequence) for sequence in job_params.sequences],
             }
             if job_params.mode == "embed":

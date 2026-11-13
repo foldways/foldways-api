@@ -67,7 +67,11 @@ class ProteinMPNNParams(BaseModel):
         default="020",
         description="Backbone noise the checkpoint was trained with, in hundredths of an Angstrom.",
     )
-    seed: int = Field(default=0, description="Random seed for reproducible sampling.")
+    seed: int = Field(
+        default=0,
+        description="Random seed for sampling. Passing 0 draws a fresh random seed each time. Pass a nonzero "
+        "value for reproducible runs.",
+    )
 
     fixed_residues: str | None = Field(
         default=None,

@@ -118,6 +118,8 @@ def generate_designs(
             protein.to_pdb(str(output_dir / f"structure_{i}.pdb"))
             if protein.ptm is not None:
                 entry["ptm"] = float(protein.ptm)
+            if protein.plddt is not None:
+                entry["mean_plddt"] = float(protein.plddt.mean())
         results.append(entry)
 
     (output_dir / "designs.fasta").write_text("\n".join(fasta_lines) + "\n")

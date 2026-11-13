@@ -178,10 +178,15 @@ def run(job_id: str, job_name: str | None, params: dict) -> None:
             output_dir.mkdir()
             for i, sample in enumerate(results):
                 (output_dir / f"prediction_{i}.cif").write_text(sample.complex.to_mmcif())
+                plddt = sample.plddt.float().cpu().numpy() if sample.plddt is not None else None
                 confidence = {
-                    "plddt": sample.plddt.float().cpu().numpy().tolist() if sample.plddt is not None else None,
+                    "mean_plddt": float(plddt.mean()) if plddt is not None else None,
+                    "plddt": plddt.tolist() if plddt is not None else None,
                     "ptm": float(sample.ptm) if sample.ptm is not None else None,
                     "iptm": float(sample.iptm) if sample.iptm is not None else None,
+                    "pair_chains_iptm": sample.pair_chains_iptm.float().cpu().numpy().tolist()
+                    if sample.pair_chains_iptm is not None
+                    else None,
                 }
                 (output_dir / f"confidence_{i}.json").write_text(json.dumps(confidence, indent=2))
             persist_job_output(job_id, output_dir)

@@ -328,7 +328,7 @@ def run(job_id: str, job_name: str | None, params: dict) -> None:
         params: A BioEmu2Params dump, revalidated here so the container never
             trusts the payload it was handed.
     """
-    import yaml
+    import yaml  # pyright: ignore[reportMissingModuleSource]
 
     logger.info(f"Starting bioemu2 sampling: job={job_id}")
     started_at = datetime.now(UTC)
