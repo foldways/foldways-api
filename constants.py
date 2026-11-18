@@ -133,20 +133,21 @@ SOLUBLEMPNN_CHECKPOINTS = (
 )
 
 # Chai-1
-CHAI_COMMIT = "66c38d1fe5c6756a89ff8596b1dea87d305ec06f"
+CHAI_COMMIT = "c691da74d6f348b19bc9f931abe95d66d0b88e78"
 CHAI_SPEC = f"chai_lab @ git+https://github.com/chaidiscovery/chai-lab.git@{CHAI_COMMIT}"
 CHAI_ASSETS_URL = "https://chaiassets.com/chai1-inference-depencencies"
-CHAI_COMPONENTS = (
-    "feature_embedding.pt",
-    "bond_loss_input_proj.pt",
-    "token_embedder.pt",
-    "trunk.pt",
-    "diffusion_module.pt",
-    "confidence_head.pt",
+CHAI_CACHE_FILES = (
+    "models_v2/feature_embedding.pt",
+    "models_v2/bond_loss_input_proj.pt",
+    "models_v2/token_embedder.pt",
+    "models_v2/trunk.pt",
+    "models_v2/diffusion_module.pt",
+    "models_v2/confidence_head.pt",
+    "conformers_v1.apkl",
 )
-CHAI_CONFORMERS_FILE = "conformers_v1.apkl"
+
 CHAI_ESM_URL_PATH = "esm2/traced_sdpa_esm2_t36_3B_UR50D_fp16.pt"
-CHAI_ESM_LOCAL_PATH = "esm/traced_sdpa_esm2_t36_3B_UR50D_fp16.pt"
+CHAI_ESM_CACHE_PATH = "esm/traced_sdpa_esm2_t36_3B_UR50D_fp16.pt"
 
 # ThermoMPNN
 THERMOMPNN_REPO = "https://github.com/Kuhlman-Lab/ThermoMPNN.git"

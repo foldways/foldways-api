@@ -9,6 +9,8 @@ from pydantic import BaseModel, Field
 from common.utils import format_run_log, mark_job_complete, mark_job_failed, persist_job_output
 from config import CHAI_GPU, CHAI_MAX_CONTAINERS, CHAI_SCALEDOWN_WINDOW, CHAI_TIMEOUT
 from constants import (
+    CHAI_CACHE_FILES,
+    CHAI_ESM_CACHE_PATH,
     CHAI_SPEC,
     PYDANTIC_SPEC,
     PYTHON_3_12,
@@ -135,6 +137,15 @@ def run(job_id: str, job_name: str | None, params: dict) -> None:
     try:
         job_params = ChaiParams.model_validate(params)
         volume.reload()
+
+        cache_path = Path(VOLUME_CHAI_CACHE)
+        required_files = (*CHAI_CACHE_FILES, CHAI_ESM_CACHE_PATH)
+        missing = [rel for rel in required_files if not (cache_path / rel).exists()]
+        if missing:
+            raise RuntimeError(
+                f"Chai weights are not staged at {VOLUME_CHAI_CACHE}. "
+                f"Missing {', '.join(missing)}. Run make setup to stage them."
+            )
 
         with tempfile.TemporaryDirectory() as tmpdir:
             tmpdir = Path(tmpdir)

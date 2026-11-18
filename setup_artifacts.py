@@ -19,9 +19,8 @@ from constants import (
     BOLTZGEN_DATA_REPO,
     BOLTZGEN_MODEL_REPO,
     CHAI_ASSETS_URL,
-    CHAI_COMPONENTS,
-    CHAI_CONFORMERS_FILE,
-    CHAI_ESM_LOCAL_PATH,
+    CHAI_CACHE_FILES,
+    CHAI_ESM_CACHE_PATH,
     CHAI_ESM_URL_PATH,
     ESM3_WEIGHTS_REPO,
     ESMC_600M_WEIGHTS_REPO,
@@ -154,21 +153,17 @@ def download_chai_weights():
 
     Chai fetches these lazily from its CDN at inference time into CHAI_DOWNLOADS_DIR.
     Staging them to the volume at the exact paths Chai expects lets the service run
-    without any download. The ESM2 file is served under esm2/ but read back from esm/,
-    so its local path differs from its URL path.
+    without any download.
     """
     import shutil
     import urllib.request
 
     volume.reload()
     cache_path = Path(VOLUME_CHAI_CACHE)
-    downloads = [
-        (f"{CHAI_ASSETS_URL}/models_v2/{component}", f"models_v2/{component}") for component in CHAI_COMPONENTS
-    ]
-    downloads.append((f"{CHAI_ASSETS_URL}/{CHAI_CONFORMERS_FILE}", CHAI_CONFORMERS_FILE))
-    downloads.append((f"{CHAI_ASSETS_URL}/{CHAI_ESM_URL_PATH}", CHAI_ESM_LOCAL_PATH))
+    downloads = [(f"{CHAI_ASSETS_URL}/{rel}", cache_path / rel) for rel in CHAI_CACHE_FILES]
+    downloads.append((f"{CHAI_ASSETS_URL}/{CHAI_ESM_URL_PATH}", cache_path / CHAI_ESM_CACHE_PATH))
 
-    missing = [(url, cache_path / rel) for url, rel in downloads if not (cache_path / rel).exists()]
+    missing = [(url, dest) for url, dest in downloads if not dest.exists()]
     if not missing:
         logger.info("Chai-1 weights already on the volume. Skipping download.")
         return
@@ -176,10 +171,15 @@ def download_chai_weights():
         logger.info(f"Downloading Chai-1 weights: {url}")
         dest.parent.mkdir(parents=True, exist_ok=True)
         request = urllib.request.Request(url, headers={"User-Agent": "python-requests/2.32"})
-        tmp = dest.with_suffix(dest.suffix + ".tmp")
-        with urllib.request.urlopen(request) as response, open(tmp, "wb") as f:
+        tmp_dest = dest.with_suffix(dest.suffix + ".tmp")
+        with urllib.request.urlopen(request) as response, open(tmp_dest, "wb") as f:
+            expected_bytes = response.headers.get("Content-Length")
             shutil.copyfileobj(response, f)
-        tmp.rename(dest)
+        downloaded_bytes = tmp_dest.stat().st_size
+        if expected_bytes is not None and downloaded_bytes < int(expected_bytes):
+            tmp_dest.unlink()
+            raise RuntimeError(f"Incomplete download from {url}: got {downloaded_bytes} of {expected_bytes} bytes")
+        tmp_dest.rename(dest)
     volume.commit()
     logger.info(f"Chai-1 weights ready on Modal at {VOLUME_CHAI_CACHE}")
 
